@@ -3,12 +3,13 @@ package com.notspend.service;
 import com.notspend.entity.Account;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
 
     void addAccount(Account account);
     List<Account> getAccounts();
-    Account getAccount(int id);
+    Optional<Account> getAccount(int id);
     void deleteAccountById(int id);
     void updateAccount(Account account);
 

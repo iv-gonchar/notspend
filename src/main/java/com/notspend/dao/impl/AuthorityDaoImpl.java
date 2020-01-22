@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AuthorityDaoImpl implements AuthorityDao {
@@ -16,7 +17,7 @@ public class AuthorityDaoImpl implements AuthorityDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public Authority get(String id) {
+    public Optional<Authority> get(String id) {
         return null;
     }
 

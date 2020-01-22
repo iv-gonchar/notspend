@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -23,7 +24,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     @Transactional
-    public Currency getCurrencyByCode(String code) {
+    public Optional<Currency> getCurrencyByCode(String code) {
         return currencyDao.get(code);
     }
 
@@ -37,7 +38,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional
     public List<Currency> getAllCurrenciesAssignedToUser() {
         String username = SecurityUserHandler.getCurrentUser();
-        User user = userService.getUser(username);
+        User user = userService.getUser(username).orElseThrow();
         return currencyDao.getAllCurrenciesAssignedToUser(user);
     }
 }

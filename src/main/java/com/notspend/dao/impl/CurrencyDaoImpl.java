@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -20,9 +21,9 @@ public class CurrencyDaoImpl implements CurrencyDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public Currency get(String id) {
+    public Optional<Currency> get(String id) {
         Session session = sessionFactory.getCurrentSession();
-        return session.get(Currency.class, id);
+        return Optional.of(session.get(Currency.class, id));
     }
 
     @Override

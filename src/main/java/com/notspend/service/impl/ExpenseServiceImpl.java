@@ -5,7 +5,6 @@ import com.notspend.dao.ExpenseDao;
 import com.notspend.entity.Account;
 import com.notspend.entity.Expense;
 import com.notspend.service.ExpenseService;
-import com.notspend.util.CalculationHelper;
 import com.notspend.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional
-    public Expense getExpenseById(int id) {
+    public Optional<Expense> getExpenseById(int id) {
         return expenseDao.get(id);
     }
 
@@ -76,7 +75,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     @Transactional
     public void deleteExpenseById(int id) {
-        Expense expense = expenseDao.get(id);
+        Expense expense = expenseDao.get(id).orElseThrow();
         Account account = expense.getAccount();
         account.plus(expense.getSum());
         accountDao.update(account);

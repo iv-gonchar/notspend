@@ -34,6 +34,9 @@
         </dependency>
 
         <!--Servlet-->
+        <!--We need it for dispatcher servlet-->
+        <!--Especially for class AbstractAnnotationConfigDispatcherServletInitializer-->
+        <!--This class allows to configure Dispatcher servlet init-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -92,11 +95,13 @@
             <version>${spring.framework.version}</version>
         </dependency>
         <!--Spring web-mvc should load all supporting dependencies (core, logging)-->
+        <!--Spring-webmvc dependency also support REST-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.framework.version}</version>
         </dependency>
+        <!--Spring ORM contains supporting classes for using Hibernate-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -150,6 +155,7 @@
         </dependency>
 
         <!--Data Mapping-->
+        <!--Jackson will convert from POJO to JSON-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

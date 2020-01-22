@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
@@ -40,9 +41,9 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Category get(Integer id) {
+    public Optional<Category> get(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        return session.get(Category.class, id);
+        return Optional.of(session.get(Category.class, id));
     }
 
     @Override
@@ -68,7 +69,7 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public boolean isCategoryHaveRelations(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        Category category = get(id);
+        Category category = get(id).orElseThrow();
         Query query = session.createQuery("FROM Expense E WHERE E.category = :obj");
         query.setParameter("obj", category);
         return !query.list().isEmpty();
@@ -78,8 +79,8 @@ public class CategoryDaoImpl implements CategoryDao {
     public int replaceCategoryInAllExpenses(Integer fromCategoryId, Integer toCategoryId){
         Session session = sessionFactory.getCurrentSession();
 
-        Category fromCategory = get(fromCategoryId);
-        Category toCategory = get(toCategoryId);
+        Category fromCategory = get(fromCategoryId).orElseThrow();
+        Category toCategory = get(toCategoryId).orElseThrow();
 
         Query query = session.createQuery("UPDATE Expense SET category = :toCategory" +
                 " WHERE category = :fromCategory");

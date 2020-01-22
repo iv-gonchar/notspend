@@ -36,7 +36,7 @@ public class MainPage {
     @RequestMapping(value = "/")
     public String getMainPage(HttpServletRequest request){
         String username = SecurityUserHandler.getCurrentUser();
-        User user = userService.getUser(username);
+        User user = userService.getUser(username).orElseThrow();
         List<Account> accountList = user.getAccounts();
         request.getSession().setAttribute("username", username);
         request.getSession().setAttribute("totalSum", String.format("%.2f", CalculationHelper.accountSum(accountList)));

@@ -1,5 +1,7 @@
 package com.notspend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,7 @@ public class Category {
     @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "username")
+    @JsonIgnore
     private User user;
 
     @Column(name = "income")

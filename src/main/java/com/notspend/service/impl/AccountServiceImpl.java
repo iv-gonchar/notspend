@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -29,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account getAccount(int id) {
+    public Optional<Account> getAccount(int id) {
         return accountDao.get(id);
     }
 
@@ -55,8 +56,8 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public int replaceAccountInAllExpenses(int fromAccountId, int toAccountId) {
         int numberOfReplaced = accountDao.replaceAccountInAllExpenses(fromAccountId, toAccountId);
-        Account accountToDelete = accountDao.get(fromAccountId);
-        Account accountToUpdate = accountDao.get(toAccountId);
+        Account accountToDelete = accountDao.get(fromAccountId).orElseThrow();
+        Account accountToUpdate = accountDao.get(toAccountId).orElseThrow();
         accountToUpdate.plus(accountToDelete.getSummary());
         accountDao.update(accountToUpdate);
         accountDao.delete(accountToDelete.getAccountId());
@@ -67,8 +68,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public boolean transferMoneyBetweenAccounts(int fromAccountId, int toAccountId, Double sum) {
-        Account accountFrom = accountDao.get(fromAccountId);
-        Account accountTo = accountDao.get(toAccountId);
+        Account accountFrom = accountDao.get(fromAccountId).orElseThrow();
+        Account accountTo = accountDao.get(toAccountId).orElseThrow();
         accountFrom.substract(sum);
         accountTo.plus(sum);
         accountDao.update(accountFrom);
@@ -79,8 +80,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public boolean transferMoneyBetweenAccountsWithDifferentCurrency(int fromAccountId, int toAccountId, Double from, Double to) {
-        Account accountFrom = accountDao.get(fromAccountId);
-        Account accountTo = accountDao.get(toAccountId);
+        Account accountFrom = accountDao.get(fromAccountId).orElseThrow();
+        Account accountTo = accountDao.get(toAccountId).orElseThrow();
         accountFrom.substract(from);
         accountTo.plus(to);
         accountDao.update(accountFrom);

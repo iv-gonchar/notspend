@@ -60,7 +60,7 @@ public class CategoryController {
             model.addAttribute("category", category);
             return "category/nameexist";
         }
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
+        User user = userService.getUser(SecurityUserHandler.getCurrentUser()).orElseThrow();
         category.setUser(user);
         categoryService.addCategory(category);
         return "success";
@@ -69,7 +69,7 @@ public class CategoryController {
     @RequestMapping("delete")
     public String deleteCategory(@ModelAttribute("categoryId") int categoryId, Model model){
         //Category for deleting
-        Category category = categoryService.getCategory(categoryId);
+        Category category = categoryService.getCategory(categoryId).orElseThrow();
         boolean isIncomeCategory = category.isIncome();
 
         //check if this category is not last expense or income category
@@ -84,7 +84,7 @@ public class CategoryController {
             //inform User that category can't be deleted
             //and propose to create new category
             //or transfer expenses to exist category
-            Category categoryToDelete = categoryService.getCategory(categoryId);
+            Category categoryToDelete = categoryService.getCategory(categoryId).orElseThrow();
             List<Category> categories = categoryService.getAllExpenseCategories();
             categories.remove(categoryToDelete);
 
@@ -101,7 +101,7 @@ public class CategoryController {
 
     @RequestMapping("update")
     public String updateCategory(@ModelAttribute("categoryId") int categoryId, Model model){
-        Category category = categoryService.getCategory(categoryId);
+        Category category = categoryService.getCategory(categoryId).orElseThrow();
         model.addAttribute("category", category);
         return "category/update";
     }
@@ -110,7 +110,7 @@ public class CategoryController {
     public String updateProcess(@ModelAttribute("category") Category category){
         //when update category User for some reason null
         //todo: rework this
-        category.setUser(userService.getUser(SecurityUserHandler.getCurrentUser()));
+        category.setUser(userService.getUser(SecurityUserHandler.getCurrentUser()).orElseThrow());
         categoryService.updateCategory(category);
         if (category.isIncome()){
             return "redirect:allincome";
@@ -132,7 +132,7 @@ public class CategoryController {
                                                  @ModelAttribute("categoryToDelete") int fromCategoryId,
                                                  Model model){
         String username = SecurityUserHandler.getCurrentUser();
-        category.setUser(userService.getUser(username));
+        category.setUser(userService.getUser(username).orElseThrow());
         categoryService.addCategory(category);
         categoryService.replaceCategoryInAllExpenses(fromCategoryId, category.getCategoryId());
         return "success";

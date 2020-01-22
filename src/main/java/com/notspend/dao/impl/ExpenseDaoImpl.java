@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExpenseDaoImpl implements ExpenseDao {
@@ -32,10 +33,10 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
-    public Expense get(Integer id) {
+    public Optional<Expense> get(Integer id) {
         Session session = sessionFactory.getCurrentSession();
         Expense expense = session.get(Expense.class, id);
-        return expense;
+        return Optional.of(expense);
     }
 
     @Override

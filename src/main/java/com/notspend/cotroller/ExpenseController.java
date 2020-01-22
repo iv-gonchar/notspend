@@ -89,10 +89,10 @@ public class ExpenseController {
             return "expense/add";
         }
 
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
-        Category selectedCategory = categoryService.getCategory(category.getCategoryId());
-        Currency selectedCurrency = currencyService.getCurrencyByCode(currency.getCode());
-        Account selectedAccount = accountService.getAccount(account.getAccountId());
+        User user = userService.getUser(SecurityUserHandler.getCurrentUser()).orElseThrow();
+        Category selectedCategory = categoryService.getCategory(category.getCategoryId()).orElseThrow();
+        Currency selectedCurrency = currencyService.getCurrencyByCode(currency.getCode()).orElseThrow();
+        Account selectedAccount = accountService.getAccount(account.getAccountId()).orElseThrow();
 
         expense.setCurrency(selectedCurrency);
         expense.setCategory(selectedCategory);
@@ -144,10 +144,10 @@ public class ExpenseController {
         expense.setDate(LocalDate.parse(expenseDate));
         expense.setTime(LocalTime.now());
         expense.setComment(expenseComment);
-        Category category = categoryService.getCategory(Integer.parseInt(expenseCategory));
-        Account account = accountService.getAccount(Integer.parseInt(expenseAccount));
+        Category category = categoryService.getCategory(Integer.parseInt(expenseCategory)).orElseThrow();
+        Account account = accountService.getAccount(Integer.parseInt(expenseAccount)).orElseThrow();
         String username = SecurityUserHandler.getCurrentUser();
-        User user = userService.getUser(username);
+        User user = userService.getUser(username).orElseThrow();
 
         expense.setCategory(category);
         expense.setAccount(account);

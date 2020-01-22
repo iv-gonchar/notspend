@@ -50,9 +50,9 @@ public class AccountController {
             model.addAttribute("currencies", currencies);
             return "account/add";
         }
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
+        User user = userService.getUser(SecurityUserHandler.getCurrentUser()).orElseThrow();
         account.setUser(user);
-        account.setCurrency(currencyService.getCurrencyByCode(currency.getCode()));
+        account.setCurrency(currencyService.getCurrencyByCode(currency.getCode()).orElseThrow());
         accountService.addAccount(account);
         return "success";
     }
@@ -67,7 +67,7 @@ public class AccountController {
 
     @GetMapping("update")
     public String updateAccount(@ModelAttribute("accountId") int accountId, Model model){
-        Account account = accountService.getAccount(accountId);
+        Account account = accountService.getAccount(accountId).orElseThrow();
         model.addAttribute("account", account);
         return "account/update";
     }
@@ -75,7 +75,7 @@ public class AccountController {
     @RequestMapping("updateprocess")
     public String updateProcess(@ModelAttribute("account") Account updatedAccount){
         //todo: rework this solution
-        Account account = accountService.getAccount(updatedAccount.getAccountId());
+        Account account = accountService.getAccount(updatedAccount.getAccountId()).orElseThrow();
         account.setType(updatedAccount.getType());
         account.setDescription(updatedAccount.getDescription());
         accountService.updateAccount(account);
@@ -93,7 +93,7 @@ public class AccountController {
 
         //inform User that account can't be deleted
         //and propose to transfer expenses to exist account
-        Account accountToDelete = accountService.getAccount(accountId);
+        Account accountToDelete = accountService.getAccount(accountId).orElseThrow();
         accounts.remove(accountToDelete);
 
         Account account = new Account();
@@ -108,8 +108,8 @@ public class AccountController {
     public String transferToOtherAccountAndDelete(@ModelAttribute("accountId") int toAccountId,
                                                   @ModelAttribute("accountToDelete") int fromAccountId,
                                                   Model model){
-        Account accountFrom = accountService.getAccount(fromAccountId);
-        Account accountTo = accountService.getAccount(toAccountId);
+        Account accountFrom = accountService.getAccount(fromAccountId).orElseThrow();
+        Account accountTo = accountService.getAccount(toAccountId).orElseThrow();
 
         if (accountFrom.getCurrency().equals(accountTo.getCurrency())){
             accountService.replaceAccountInAllExpenses(fromAccountId, toAccountId);
@@ -137,8 +137,8 @@ public class AccountController {
                                                       @ModelAttribute("accountTo") int accountToId,
                                                       @ModelAttribute("sum") Double sum,
                                                       Model model){
-        Account accountFrom = accountService.getAccount(accountFromId);
-        Account accountTo = accountService.getAccount(accountToId);
+        Account accountFrom = accountService.getAccount(accountFromId).orElseThrow();
+        Account accountTo = accountService.getAccount(accountToId).orElseThrow();
         if (accountFrom.getCurrency().equals(accountTo.getCurrency())){
             accountService.transferMoneyBetweenAccounts(accountFromId, accountToId, sum);
             return "success";

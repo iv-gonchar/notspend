@@ -10,20 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AccountDaoImpl implements AccountDao {
-
-
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
-    public Account get(Integer id) {
+    public Optional<Account> get(Integer id) {
         Session session = sessionFactory.getCurrentSession();
         Account account = session.get(Account.class, id);
-        return account;
+        return Optional.of(account);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public boolean isAccountHaveRelations(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        Account account = get(id);
+        Account account = get(id).get();
         Query query = session.createQuery("FROM Expense E WHERE E.account = :obj");
         query.setParameter("obj", account);
         return !query.list().isEmpty();
@@ -66,8 +65,8 @@ public class AccountDaoImpl implements AccountDao {
     public int replaceAccountInAllExpenses(Integer fromAccountId, Integer toAccountId){
         Session session = sessionFactory.getCurrentSession();
 
-        Account fromAccount = get(fromAccountId);
-        Account toAccount = get(toAccountId);
+        Account fromAccount = get(fromAccountId).get();
+        Account toAccount = get(toAccountId).get();
 
         Query query = session.createQuery("UPDATE Expense SET account = :toAccount" +
                 " WHERE account = :fromAccount");
