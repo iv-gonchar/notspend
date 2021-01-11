@@ -7,6 +7,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -32,14 +34,14 @@ public class Account {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                           CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "username")
     private User user;
 
-    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="currency_code")
+    @JoinColumn(name = "currency_code")
     private Currency currency;
 
     @Column(name = "synchronization_token")
@@ -51,15 +53,20 @@ public class Account {
     @Column(name = "synchronization_time")
     private Long synchronizationTime;
 
-    public void substract(Double sum){
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Expense> expenses = new ArrayList<>();
+
+    public void substract(Double sum) {
         this.summary = this.summary - sum;
     }
 
-    public void plus(Double sum){
+    public void plus(Double sum) {
         this.summary = this.summary + sum;
     }
 
-    public void minus(Double sum){
+    public void minus(Double sum) {
         this.summary = this.summary - sum;
     }
 
