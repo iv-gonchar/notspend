@@ -62,3 +62,6 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/jetbrains
+
+# ignore application.properties to save database password in secret
+application.properties
