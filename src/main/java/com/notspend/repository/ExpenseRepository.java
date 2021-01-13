@@ -1,15 +1,17 @@
 package com.notspend.repository;
 
+import com.notspend.entity.Account;
 import com.notspend.entity.Expense;
 import com.notspend.entity.User;
-import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ExpenseRepository extends CrudRepository<Expense, Integer> {
+public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer> {
 
-    List<Expense> findByUserAndCategoryIncomeAndDateBetween(User user, boolean income, LocalDate dateFrom, LocalDate dateTo);
+    Long countByAccountAndUser(Account account, User user);
+
+    List<Expense> findByCategoryIncomeAndDateBetweenAndUser(boolean income, LocalDate dateFrom, LocalDate dateTo, User user);
 
     // Double getSumExpensesBetweenDates(LocalDate dateFrom, LocalDate dateTo);
 }

@@ -1,15 +1,11 @@
 package com.notspend.repository;
 
 import com.notspend.entity.Currency;
-import com.notspend.entity.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface CurrencyRepository extends CrudRepository<Currency, String> {
-
-    List<Currency> findByUser(User user);
+public interface CurrencyRepository extends Repository<Currency, String> {
 
     Optional<Currency> findByNumber(Integer number);
 }
