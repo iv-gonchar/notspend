@@ -19,7 +19,7 @@ public class DateHelper {
         return today.withDayOfMonth(today.lengthOfMonth());
     }
 
-    public static List<String> getNamesForLastTwelveMonths(){
+    public static List<String> getNamesForLastTwelveMonths() {
         List<String> monthNames = new ArrayList<>();
         int monthFrom = LocalDate.now().getMonthValue() + 1;
         for (int i = monthFrom; i < monthFrom + 12; i++) {
@@ -29,5 +29,16 @@ public class DateHelper {
             monthNames.add(monthName);
         }
         return monthNames;
+    }
+
+    public static LocalDate today() {
+        return LocalDate.now();
+    }
+
+    public static LocalDate yearAgo() {
+        return today()
+                .minusYears(1)
+                .minusDays(today().getDayOfMonth() - 1L)
+                .plusMonths(1);
     }
 }

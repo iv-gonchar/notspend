@@ -16,7 +16,7 @@ public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer
 
     boolean existsByCategoryCategoryIdAndUser(int categoryId, User user);
 
-    List<Expense> findByCategoryIncomeAndDateBetweenAndUser(boolean income, LocalDate dateFrom, LocalDate dateTo, User user);
+    List<Expense> getByCategoryIncomeAndDateBetweenAndUser(boolean income, LocalDate dateFrom, LocalDate dateTo, User user);
 
     @Modifying //(clearAutomatically = true) should be uncommented in case of errors
     // todo remove user from arguments by using SpEL instead
@@ -27,5 +27,11 @@ public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer
     @Query("UPDATE Expense SET category = ?2 WHERE category = ?1 AND user = ?3")
     long updateCategoryInExpenses(Category oldCategory, Category newCategory, User user);
 
-    // Double getSumExpensesBetweenDates(LocalDate dateFrom, LocalDate dateTo);
+    @Query("SELECT SUM(e.sum) FROM Expense e LEFT JOIN e.category " +
+            "WHERE e.category.income = FALSE AND e.date BETWEEN ?1 AND ?2 AND e.user = ?3")
+    Double getExpenseSumBetweenDates(LocalDate dateFrom, LocalDate dateTo, User user);
+
+    @Query("SELECT SUM(e.sum) FROM Expense e LEFT JOIN e.category " +
+            "WHERE e.category.income = TRUE AND e.date BETWEEN ?1 AND ?2 AND e.user = ?3")
+    Double getIncomeSumBetweenDates(LocalDate dateFrom, LocalDate dateTo, User user);
 }
