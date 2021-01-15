@@ -1,6 +1,7 @@
 package com.notspend.repository;
 
 import com.notspend.entity.User;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Optional;
  * @param <T> Entity type
  * @param <ID> ID property type
  */
+@NoRepositoryBean
 public interface CrudByUserRepository<T, ID> extends Repository<T, ID> {
 
     Optional<T> getByIdAndUser(ID id, User user);
