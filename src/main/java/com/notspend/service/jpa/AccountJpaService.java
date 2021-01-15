@@ -119,7 +119,7 @@ public class AccountJpaService implements AccountService {
 
     private void validateAccountOwner(Account account) {
         if (!userService.currentUser().equals(account.getUser())) {
-            throw new IllegalArgumentException("Operation with another user's account are prohibited");
+            throw new IllegalArgumentException("Operation with another user's account is prohibited");
         }
     }
 

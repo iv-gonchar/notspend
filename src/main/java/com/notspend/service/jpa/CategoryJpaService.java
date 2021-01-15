@@ -86,7 +86,7 @@ public class CategoryJpaService implements CategoryService {
 
     private void validateCategoryOwner(Category category) {
         if (!userService.currentUser().equals(category.getUser())) {
-            throw new IllegalArgumentException("Operation with another user's category are prohibited");
+            throw new IllegalArgumentException("Operation with another user's category is prohibited");
         }
     }
 }
