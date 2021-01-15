@@ -12,7 +12,7 @@ import java.util.Optional;
  * @param <T> Entity type
  * @param <ID> ID property type
  */
-public interface CrudByUserRepository<T, ID> extends Repository {
+public interface CrudByUserRepository<T, ID> extends Repository<T, ID> {
 
     Optional<T> getByIdAndUser(ID id, User user);
 
