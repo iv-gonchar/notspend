@@ -9,6 +9,7 @@ import com.notspend.service.UserService;
 import com.notspend.util.DateHelper;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Profile({"default", "jpa"})
 public class ExpenseJpaService implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;

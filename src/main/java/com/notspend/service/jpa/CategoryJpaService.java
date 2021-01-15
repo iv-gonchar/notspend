@@ -7,6 +7,7 @@ import com.notspend.service.CategoryService;
 import com.notspend.service.UserService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@Profile({"default", "jpa"})
 public class CategoryJpaService implements CategoryService {
 
     private final CategoryRepository categoryRepository;

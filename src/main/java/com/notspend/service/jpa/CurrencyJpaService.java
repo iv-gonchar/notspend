@@ -5,6 +5,7 @@ import com.notspend.repository.CurrencyRepository;
 import com.notspend.service.CurrencyService;
 import com.notspend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@Profile({"default", "jpa"})
 public class CurrencyJpaService implements CurrencyService {
 
     private final CurrencyRepository currencyRepository;
