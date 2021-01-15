@@ -12,15 +12,15 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"accountId"})
-@ToString(of = {"accountId", "type", "summary", "user", "summary"})
+@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "type", "summary", "user", "summary"})
 @Table(name = "account")
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private int accountId;
+    private int id;
 
     @Column(name = "type")
     @NotNull(message = "Name of your account is required")

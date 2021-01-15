@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
         Account accountToUpdate = accountDao.get(toAccountId);
         accountToUpdate.plus(accountToDelete.getSummary());
         accountDao.update(accountToUpdate);
-        accountDao.delete(accountToDelete.getAccountId());
+        accountDao.delete(accountToDelete.getId());
 
         return numberOfReplaced;
     }

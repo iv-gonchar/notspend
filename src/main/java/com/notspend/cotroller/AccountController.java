@@ -76,7 +76,7 @@ public class AccountController {
     @PostMapping("updateprocess")
     public String updateProcess(@ModelAttribute("account") Account updatedAccount){
         //todo: rework this solution
-        Account account = accountService.getAccount(updatedAccount.getAccountId());
+        Account account = accountService.getAccount(updatedAccount.getId());
         account.setType(updatedAccount.getType());
         account.setDescription(updatedAccount.getDescription());
         account.setToken(updatedAccount.getToken());

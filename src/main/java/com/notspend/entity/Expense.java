@@ -11,14 +11,14 @@ import java.time.LocalTime;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = "expenseId")
+@EqualsAndHashCode(of = "id")
 @Table(name = "expense")
 public class Expense implements Comparable<Expense>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expense_id")
-    private Integer expenseId;
+    private Integer id;
 
     @Column(name = "sum")
     @NotNull(message = "Sum of your expense is required")

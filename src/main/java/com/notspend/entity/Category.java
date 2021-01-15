@@ -17,14 +17,14 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"categoryId"})
+@EqualsAndHashCode(of = {"id"})
 @Table(name = "category")
 public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private int categoryId;
+    private int id;
 
     @Column(name = "name")
     @NotEmpty(message = "Category name is required")

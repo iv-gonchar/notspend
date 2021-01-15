@@ -135,7 +135,7 @@ public class CategoryController {
         String username = SecurityUserHandler.getCurrentUser();
         category.setUser(userService.getUser(username));
         categoryService.addCategory(category);
-        categoryService.replaceCategoryInAllExpenses(fromCategoryId, category.getCategoryId());
+        categoryService.replaceCategoryInAllExpenses(fromCategoryId, category.getId());
         return "success";
     }
 }

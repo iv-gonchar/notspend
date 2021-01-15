@@ -74,7 +74,7 @@ public class CategoryJpaService implements CategoryService {
 
     @Override
     public boolean isCategoryHaveRelations(int id) {
-        return expenseRepository.existsByCategoryCategoryIdAndUser(id, userService.currentUser());
+        return expenseRepository.existsByCategoryIdAndUser(id, userService.currentUser());
     }
 
     @Override

@@ -25,9 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("expense")
@@ -101,9 +99,9 @@ public class ExpenseController {
         }
 
         User user = userService.getUser(SecurityUserHandler.getCurrentUser());
-        Category selectedCategory = categoryService.getCategory(category.getCategoryId());
+        Category selectedCategory = categoryService.getCategory(category.getId());
         Currency selectedCurrency = currencyService.getCurrencyByCode(currency.getCode());
-        Account selectedAccount = accountService.getAccount(account.getAccountId());
+        Account selectedAccount = accountService.getAccount(account.getId());
 
         expense.setCurrency(selectedCurrency);
         expense.setCategory(selectedCategory);

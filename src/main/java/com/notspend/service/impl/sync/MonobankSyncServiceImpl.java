@@ -141,7 +141,7 @@ public class MonobankSyncServiceImpl implements ExpenseSyncService {
                         .findFirst()
                         .orElse((new Category()));
 
-                if (category.getCategoryId() == 0) {
+                if (category.getId() == 0) {
                     category.setUser(account.getUser());
                     category.setIncome(false);
                     category.setName(mccCategoryName);

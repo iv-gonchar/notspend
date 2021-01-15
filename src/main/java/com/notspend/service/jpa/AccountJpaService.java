@@ -61,7 +61,7 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public boolean isAccountHaveRelations(int accountId) {
-        return expenseRepository.existsByAccountAccountIdAndUser(accountId, userService.currentUser());
+        return expenseRepository.existsByAccountIdAndUser(accountId, userService.currentUser());
     }
 
     @Override

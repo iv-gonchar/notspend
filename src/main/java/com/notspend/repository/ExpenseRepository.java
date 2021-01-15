@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer> {
 
-    boolean existsByAccountAccountIdAndUser(int accountId, User user);
+    boolean existsByAccountIdAndUser(int accountId, User user);
 
-    boolean existsByCategoryCategoryIdAndUser(int categoryId, User user);
+    boolean existsByCategoryIdAndUser(int categoryId, User user);
 
     List<Expense> getByCategoryIncomeAndDateBetweenAndUser(boolean income, LocalDate dateFrom, LocalDate dateTo, User user);
 
