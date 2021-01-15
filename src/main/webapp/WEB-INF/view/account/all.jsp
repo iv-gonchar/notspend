@@ -78,12 +78,12 @@
                     <c:forEach var="tempAccount" items="${accounts}">
                     <!-- construct an "update" link with account id -->
                     <c:url var="updateLink" value="/account/update">
-                      <c:param name="accountId" value="${tempAccount.accountId}" />
+                      <c:param name="accountId" value="${tempAccount.id}" />
                     </c:url>
 
                     <!-- construct an "delete" link with account id -->
                     <c:url var="deleteLink" value="/account/delete">
-                      <c:param name="accountId" value="${tempAccount.accountId}" />
+                      <c:param name="accountId" value="${tempAccount.id}" />
                     </c:url>
                     <tr>
                       <td>${tempAccount.type}</td>
@@ -92,7 +92,7 @@
                       <td>${tempAccount.description}</td>
                       <td>
                         <a href="${updateLink}">Update</a>
-                        <a href="${deleteLink}" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempAccount.accountId}">Delete</a>
+                        <a href="${deleteLink}" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempAccount.id}">Delete</a>
                       </td>
                     </tr>
                     </c:forEach>

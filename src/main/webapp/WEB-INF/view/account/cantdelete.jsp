@@ -55,12 +55,12 @@
                   <form action="transferToExistAccount">
                       <select name="accountId" class="form-control">
                         <c:forEach var="tempAccount" items="${accounts}">
-                          <option value=${tempAccount.accountId} class="dropdown-item">${tempAccount.type}</option>
+                          <option value=${tempAccount.id} class="dropdown-item">${tempAccount.type}</option>
                         </c:forEach>
                       </select>
                     <br>
                     <input type="submit" value="Submit" class="btn btn-primary btn-user btn-block">
-                    <input type="hidden" name="accountToDelete" value=${accountToDelete.accountId} hidden="true">
+                    <input type="hidden" name="accountToDelete" value=${accountToDelete.id} hidden="true">
                   </form>
               </div>
             </div>

@@ -50,7 +50,7 @@
               <div class="form-group">
                 <select name="accountFrom" class="form-control">
                   <c:forEach var="tempAccount" items="${accounts}">
-                    <option value=${tempAccount.accountId} class="dropdown-item">${tempAccount.type}</option>
+                    <option value=${tempAccount.id} class="dropdown-item">${tempAccount.type}</option>
                   </c:forEach>
                 </select>
               </div>
@@ -58,7 +58,7 @@
               <div class="form-group">
                 <select name="accountTo" class="form-control">
                   <c:forEach var="tempAccount" items="${accounts}">
-                    <option value=${tempAccount.accountId} class="dropdown-item">${tempAccount.type}</option>
+                    <option value=${tempAccount.id} class="dropdown-item">${tempAccount.type}</option>
                   </c:forEach>
                 </select>
               </div>
