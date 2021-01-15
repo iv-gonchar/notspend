@@ -15,7 +15,9 @@ public interface CategoryRepository extends CrudByUserRepository<Category, Integ
      * @param isIncome denotes whether income or expense catefories should be returned
      * @return income or expense categories
      */
-    List<Category> findByIncomeAndUser(boolean isIncome, User user);
+    List<Category> getByIncomeAndUser(boolean isIncome, User user);
 
-    Optional<Category> findByNameAndUser(String name, User user);
+    Optional<Category> getByNameAndUser(String name, User user);
+
+    boolean existsByNameAndUser(String name, User user);
 }
