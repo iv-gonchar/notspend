@@ -74,19 +74,19 @@
                     <c:forEach var="tempCategory" items="${categories}">
                     <!-- construct an "update" link with customer id -->
                     <c:url var="updateLink" value="/category/update">
-                      <c:param name="categoryId" value="${tempCategory.categoryId}" />
+                      <c:param name="categoryId" value="${tempCategory.id}" />
                     </c:url>
 
                     <!-- construct an "delete" link with customer id -->
                     <c:url var="deleteLink" value="/category/delete">
-                      <c:param name="categoryId" value="${tempCategory.categoryId}" />
+                      <c:param name="categoryId" value="${tempCategory.id}" />
                     </c:url>
                     <tr>
                       <td>${tempCategory.name}</td>
                       <td>${tempCategory.description}</td>
                       <td>
                         <a href="${updateLink}">Update</a>
-                        <a href="#" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempCategory.categoryId}">Delete</a>
+                        <a href="#" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempCategory.id}">Delete</a>
                       </td>
                     </tr>
                     </c:forEach>

@@ -54,12 +54,12 @@
                   <form action="transferToExistCategory">
                       <select name="categoryId" class="form-control">
                         <c:forEach var="tempCategory" items="${categories}">
-                          <option value=${tempCategory.categoryId} class="dropdown-item">${tempCategory.name}</option>
+                          <option value=${tempCategory.id} class="dropdown-item">${tempCategory.name}</option>
                         </c:forEach>
                       </select>
                     <br>
                     <input type="submit" value="Submit" class="btn btn-primary btn-user btn-block">
-                    <input type="hidden" name="categoryToDelete" value=${categoryToDelete.categoryId} hidden="true">
+                    <input type="hidden" name="categoryToDelete" value=${categoryToDelete.id} hidden="true">
                   </form>
               </div>
 
@@ -74,7 +74,7 @@
                     <form:input path="description" cssClass="form-control" placeholder="Description"/>
                   </div>
                   <input type="submit" value="Add" class="btn btn-primary btn-user btn-block"/>
-                  <input type="hidden" name="categoryToDelete" value=${categoryToDelete.categoryId} hidden="true">
+                  <input type="hidden" name="categoryToDelete" value=${categoryToDelete.id} hidden="true">
                 </form:form>
               </div>
             </div>
