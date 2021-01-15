@@ -5,11 +5,13 @@ import com.notspend.entity.Authority;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@Profile("orm")
 public class AuthorityDaoImpl implements AuthorityDao {
 
     @Autowired

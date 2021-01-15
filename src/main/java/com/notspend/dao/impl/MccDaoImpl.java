@@ -5,9 +5,11 @@ import com.notspend.entity.Mcc;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Profile("orm")
 public class MccDaoImpl implements MccDao {
 
     @Autowired
