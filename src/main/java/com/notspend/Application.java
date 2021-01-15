@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Import;
 
 @Import(AppConfig.class)
-@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
+@EnableAutoConfiguration()
+//@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
