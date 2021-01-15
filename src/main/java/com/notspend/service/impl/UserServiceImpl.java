@@ -3,6 +3,7 @@ package com.notspend.service.impl;
 import com.notspend.dao.UserDao;
 import com.notspend.entity.User;
 import com.notspend.service.UserService;
+import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addUser(User user) {
         userDao.save(user);
+    }
+
+    @Override
+    public User currentUser() {
+        return userDao.get(SecurityUserHandler.getCurrentUser());
     }
 
     @Override

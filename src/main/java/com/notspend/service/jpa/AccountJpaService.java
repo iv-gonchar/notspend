@@ -1,11 +1,10 @@
 package com.notspend.service.jpa;
 
 import com.notspend.entity.Account;
-import com.notspend.entity.User;
 import com.notspend.repository.AccountRepository;
 import com.notspend.repository.ExpenseRepository;
-import com.notspend.repository.UserRepository;
 import com.notspend.service.AccountService;
+import com.notspend.service.UserService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class AccountJpaService implements AccountService {
 
     private final ExpenseRepository expenseRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public void addAccount(Account account) {
@@ -31,12 +30,12 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public List<Account> getAccounts() {
-        return accountRepository.getAllByUser(currentUser());
+        return accountRepository.getAllByUser(userService.currentUser());
     }
 
     @Override
     public Account getAccount(int id) {
-        return accountRepository.getByIdAndUser(id, currentUser()).orElseThrow(
+        return accountRepository.getByIdAndUser(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no account with id " + id + " in repository " +
                         "for current user " + SecurityUserHandler.getCurrentUser())
         );
@@ -44,7 +43,7 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public void deleteAccountById(int id) {
-        accountRepository.deleteByIdAndUser(id, currentUser());
+        accountRepository.deleteByIdAndUser(id, userService.currentUser());
     }
 
     public void deleteAccount(Account account) {
@@ -60,7 +59,7 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public boolean isAccountHaveRelations(int accountId) {
-        return expenseRepository.existsByAccountAccountIdAndUser(accountId, currentUser());
+        return expenseRepository.existsByAccountAccountIdAndUser(accountId, userService.currentUser());
     }
 
     @Override
@@ -68,7 +67,7 @@ public class AccountJpaService implements AccountService {
     public int replaceAccountInAllExpenses(int fromAccountId, int toAccountId) {
         Account oldAccount = getAccount(fromAccountId);
         Account newAccount = getAccount(toAccountId);
-        long updated = expenseRepository.updateAccountInExpenses(oldAccount, newAccount, currentUser());
+        long updated = expenseRepository.updateAccountInExpenses(oldAccount, newAccount, userService.currentUser());
         double balance = oldAccount.getSummary();
         transferMoney(oldAccount, newAccount, balance);
         // todo maybe remove this line, caller should call both methods?
@@ -119,13 +118,9 @@ public class AccountJpaService implements AccountService {
     }
 
     private void validateAccountOwner(Account account) {
-        if (!currentUser().equals(account.getUser())) {
+        if (!userService.currentUser().equals(account.getUser())) {
             throw new IllegalArgumentException("Operation with another user's account are prohibited");
         }
     }
 
-    // TODO move to UserJpaService
-    private User currentUser() {
-        return userRepository.getByUsername(SecurityUserHandler.getCurrentUser());
-    }
 }
