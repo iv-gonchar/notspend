@@ -26,7 +26,7 @@ public class UserJpaService implements UserService {
     @Override
     // todo maybe remove this method as it may be not used
     public List<User> getAllUsers() {
-        return userRepository.getAll();
+        return userRepository.findAll();
     }
 
     @Override
