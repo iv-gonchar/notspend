@@ -12,8 +12,8 @@ public interface CurrencyRepository extends Repository<Currency, String> {
 
     List<Currency> getAll();
 
-    @Query("SELECT DISTINCT cur FROM currency AS cur WHERE EXISTS " +
-            "(SELECT acc FROM account AS acc WHERE acc.currency = cur AND acc.user = ?1)")
+    @Query("SELECT DISTINCT cur FROM Currency AS cur WHERE EXISTS " +
+            "(SELECT acc FROM Account AS acc WHERE acc.currency = cur AND acc.user = ?1)")
     List<Currency> getAssignedToUser(User user);
 
     Optional<Currency> getByCode(String code);
