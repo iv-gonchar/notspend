@@ -36,7 +36,7 @@ public class CurrencyJpaService implements CurrencyService {
 
     @Override
     public List<Currency> getAllCurrencies() {
-        return currencyRepository.getAll();
+        return currencyRepository.findAll();
     }
 
     @Override

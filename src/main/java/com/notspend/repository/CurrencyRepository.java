@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CurrencyRepository extends Repository<Currency, String> {
 
-    List<Currency> getAll();
+    List<Currency> findAll();
 
     @Query("SELECT DISTINCT cur FROM Currency AS cur WHERE EXISTS " +
             "(SELECT acc FROM Account AS acc WHERE acc.currency = cur AND acc.user = ?1)")
