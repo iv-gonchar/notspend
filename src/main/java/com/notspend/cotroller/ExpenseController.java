@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -76,20 +73,21 @@ public class ExpenseController {
     //Validation annotation should be in POJO class like @NotNull, @Min
     @PostMapping("addProcess")
     public String processForm(@Valid @ModelAttribute("expense") Expense expense, BindingResult bindingResult,
-                              @ModelAttribute("tempCategory") Category category,
-                              @ModelAttribute("tempAccount") Account account,
+                              @RequestParam("categoryId") int categoryId,
+                              @RequestParam("accountId") int accountId,
                               @ModelAttribute("tempCurrency") Currency currency,
                               RedirectAttributes redirectAttributes,
                               Model model){
         if(bindingResult.hasErrors()){
-            List<Category> categories;
+//            List<Category> categories;
+            List<Category> categories = categoryService.getAllExpenseCategories();
             List<Currency> currencies = currencyService.getAllCurrenciesAssignedToUser();
-            if(category.isIncome()){
-                categories = categoryService.getAllIncomeCategories();
-            } else {
-                categories = categoryService.getAllExpenseCategories();
-
-            }
+//            if(categoryId.isIncome()){
+//                categories = categoryService.getAllIncomeCategories();
+//            } else {
+//                categories = categoryService.getAllExpenseCategories();
+//
+//            }
             List<Account> accounts = accountService.getAccounts();
             expense.setDate(LocalDate.now());
             model.addAttribute("categories", categories);
@@ -99,9 +97,9 @@ public class ExpenseController {
         }
 
         User user = userService.getUser(SecurityUserHandler.getCurrentUser());
-        Category selectedCategory = categoryService.getCategory(category.getId());
+        Category selectedCategory = categoryService.getCategory(categoryId);
         Currency selectedCurrency = currencyService.getCurrencyByCode(currency.getCode());
-        Account selectedAccount = accountService.getAccount(account.getId());
+        Account selectedAccount = accountService.getAccount(accountId);
 
         expense.setCurrency(selectedCurrency);
         expense.setCategory(selectedCategory);

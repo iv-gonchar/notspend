@@ -85,7 +85,7 @@
 
                     <!-- construct an "delete" link with customer id -->
                     <c:url var="deleteLink" value="/expense/delete">
-                      <c:param name="expenseId" value="${tempExpense.expenseId}" />
+                      <c:param name="expenseId" value="${tempExpense.id}" />
                     </c:url>
                     <tr>
                       <td>
@@ -98,7 +98,7 @@
                       <td>${tempExpense.account.type}</td>
                       <td>${tempExpense.comment}</td>
                       <td>
-                        <a href="${deleteLink}" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempExpense.expenseId}">Delete</a>
+                        <a href="${deleteLink}" data-toggle="modal" data-target="#deleteModal" onclick="window.id=${tempExpense.id}">Delete</a>
                       </td>
                     </tr>
                     </c:forEach>

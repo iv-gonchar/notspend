@@ -11,6 +11,7 @@ import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -82,6 +83,7 @@ public class ExpenseJpaService implements ExpenseService {
     }
 
     @Override
+    @Transactional
     public void deleteExpenseById(int id) {
         Expense expense = getExpenseById(id);
         Account account = expense.getAccount();
