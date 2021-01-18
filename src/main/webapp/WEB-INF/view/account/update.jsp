@@ -45,7 +45,7 @@
             </div>
 
             <form:form action="updateprocess" modelAttribute="account" cssClass="user" method="post">
-              <form:hidden path="accountId"/>
+              <form:hidden path="id"/>
               <div class="form-group">
               <form:input path="type" cssClass="form-control form-control-user" placeholder="Account type"/>
               </div>
