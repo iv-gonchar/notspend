@@ -31,9 +31,7 @@ public class UserJpaService implements UserService {
 
     @Override
     public User getUser(String username) {
-        return userRepository.getByUsername(username).orElseThrow(
-                () -> new NoSuchElementException("There is no user with username " + username + " in repository")
-        );
+        return userRepository.getByUsername(username).orElse(null);
     }
 
     @Override
