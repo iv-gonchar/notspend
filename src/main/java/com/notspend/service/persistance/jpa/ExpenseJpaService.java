@@ -43,7 +43,7 @@ public class ExpenseJpaService implements ExpenseService {
 
     @Override
     public Expense getExpenseById(int id) {
-        return expenseRepository.getByIdAndUser(id, userService.currentUser()).orElseThrow(
+        return expenseRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no expense with id " + id + " in repository " +
                         "for current user " + SecurityUserHandler.getCurrentUser())
         );
@@ -58,7 +58,7 @@ public class ExpenseJpaService implements ExpenseService {
 
     @Override
     public List<Expense> getAllExpenses() {
-        List<Expense> expenses = expenseRepository.getAllByUser(userService.currentUser());
+        List<Expense> expenses = expenseRepository.getAllByUserUsername(userService.currentUser());
         // todo use Spring Data JPA sort instead
         Collections.sort(expenses);
         return expenses;
@@ -66,7 +66,7 @@ public class ExpenseJpaService implements ExpenseService {
 
     @Override
     public List<Expense> getExpensesDuringCurrentMonth() {
-        List<Expense> expenses = expenseRepository.getByCategoryIncomeAndDateBetweenAndUser(false,
+        List<Expense> expenses = expenseRepository.getByCategoryIncomeAndDateBetweenAndUserUsername(false,
                 DateHelper.getFirstDayOfCurrentMonth(), DateHelper.getLastDayOfCurrentMonth(), userService.currentUser());
         // todo use Spring Data JPA sort instead
         Collections.sort(expenses);
@@ -75,7 +75,7 @@ public class ExpenseJpaService implements ExpenseService {
 
     @Override
     public List<Expense> getIncomesDuringCurrentMonth() {
-        List<Expense> expenses = expenseRepository.getByCategoryIncomeAndDateBetweenAndUser(true,
+        List<Expense> expenses = expenseRepository.getByCategoryIncomeAndDateBetweenAndUserUsername(true,
                 DateHelper.getFirstDayOfCurrentMonth(), DateHelper.getLastDayOfCurrentMonth(), userService.currentUser());
         // todo use Spring Data JPA sort instead
         Collections.sort(expenses);
@@ -93,7 +93,7 @@ public class ExpenseJpaService implements ExpenseService {
             account.plus(expense.getSum());
         }
         accountService.updateAccount(account);
-        expenseRepository.deleteByIdAndUser(id, userService.currentUser());
+        expenseRepository.deleteByIdAndUserUsername(id, userService.currentUser());
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ExpenseJpaService implements ExpenseService {
     public List<Expense> getAllIncomeDuringYear() {
         LocalDate today = DateHelper.today();
         LocalDate yearAgo = DateHelper.yearAgo();
-        return expenseRepository.getByCategoryIncomeAndDateBetweenAndUser(true, yearAgo, today,
+        return expenseRepository.getByCategoryIncomeAndDateBetweenAndUserUsername(true, yearAgo, today,
                 userService.currentUser());
     }
 
@@ -126,7 +126,7 @@ public class ExpenseJpaService implements ExpenseService {
     public List<Expense> getAllExpenseDuringYear() {
         LocalDate today = DateHelper.today();
         LocalDate yearAgo = DateHelper.yearAgo();
-        return expenseRepository.getByCategoryIncomeAndDateBetweenAndUser(false, yearAgo, today,
+        return expenseRepository.getByCategoryIncomeAndDateBetweenAndUserUsername(false, yearAgo, today,
                 userService.currentUser());
     }
 
@@ -151,10 +151,10 @@ public class ExpenseJpaService implements ExpenseService {
     }
 
     private void validateExpenseOwner(Expense expense) {
-        if (!userService.currentUser().equals(expense.getUser())) {
+        if (!userService.currentUser().equals(expense.getUser().getUsername())) {
             throw new IllegalArgumentException("Operation with another user's expense is prohibited");
         }
-        if (!userService.currentUser().equals(expense.getAccount().getUser())) {
+        if (!userService.currentUser().equals(expense.getAccount().getUser().getUsername())) {
             throw new IllegalArgumentException("Operation with another user's account is prohibited");
         }
     }

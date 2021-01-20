@@ -1,6 +1,5 @@
 package com.notspend.repository;
 
-import com.notspend.entity.User;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
@@ -16,11 +15,11 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface CrudByUserRepository<T, ID> extends Repository<T, ID> {
 
-    Optional<T> getByIdAndUser(ID id, User user);
+    Optional<T> getByIdAndUserUsername(ID id, String username);
 
-    List<T> getAllByUser(User user);
+    List<T> getAllByUserUsername(String username);
 
     <S extends T> S save(S entity);
 
-    void deleteByIdAndUser(ID id, User user);
+    void deleteByIdAndUserUsername(ID id, String username);
 }

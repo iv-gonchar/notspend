@@ -44,7 +44,7 @@ public class UserJpaService implements UserService {
     }
 
     @Override
-    public User currentUser() {
-        return getUser(SecurityUserHandler.getCurrentUser());
+    public String currentUser() {
+        return SecurityUserHandler.getCurrentUser();
     }
 }

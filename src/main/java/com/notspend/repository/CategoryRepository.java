@@ -1,7 +1,6 @@
 package com.notspend.repository;
 
 import com.notspend.entity.Category;
-import com.notspend.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +14,9 @@ public interface CategoryRepository extends CrudByUserRepository<Category, Integ
      * @param isIncome denotes whether income or expense catefories should be returned
      * @return income or expense categories
      */
-    List<Category> getByIncomeAndUser(boolean isIncome, User user);
+    List<Category> getByIncomeAndUserUsername(boolean isIncome, String username);
 
-    Optional<Category> getByNameAndUser(String name, User user);
+    Optional<Category> getByNameAndUserUsername(String name, String username);
 
-    boolean existsByNameAndUser(String name, User user);
+    boolean existsByNameAndUserUsername(String name, String username);
 }

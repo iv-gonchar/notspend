@@ -33,17 +33,17 @@ public class CategoryJpaService implements CategoryService {
 
     @Override
     public List<Category> getAllExpenseCategories() {
-        return categoryRepository.getByIncomeAndUser(false, userService.currentUser());
+        return categoryRepository.getByIncomeAndUserUsername(false, userService.currentUser());
     }
 
     @Override
     public List<Category> getAllIncomeCategories() {
-        return categoryRepository.getByIncomeAndUser(true, userService.currentUser());
+        return categoryRepository.getByIncomeAndUserUsername(true, userService.currentUser());
     }
 
     @Override
     public Category getCategory(int id) {
-        return categoryRepository.getByIdAndUser(id, userService.currentUser()).orElseThrow(
+        return categoryRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no category with id " + id + " in repository" +
                         "for current user " + SecurityUserHandler.getCurrentUser())
         );
@@ -51,7 +51,7 @@ public class CategoryJpaService implements CategoryService {
 
     @Override
     public Category getCategory(String name) {
-        return categoryRepository.getByNameAndUser(name, userService.currentUser()).orElseThrow(
+        return categoryRepository.getByNameAndUserUsername(name, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no category with name " + name + " in repository" +
                         "for current user " + SecurityUserHandler.getCurrentUser())
         );
@@ -60,7 +60,7 @@ public class CategoryJpaService implements CategoryService {
     @Override
     @Transactional
     public void deleteCategoryById(int id) {
-        categoryRepository.deleteByIdAndUser(id, userService.currentUser());
+        categoryRepository.deleteByIdAndUserUsername(id, userService.currentUser());
     }
 
     @Override
@@ -71,12 +71,12 @@ public class CategoryJpaService implements CategoryService {
 
     @Override
     public boolean isCategoryNameExist(Category category) {
-        return categoryRepository.existsByNameAndUser(category.getName(), userService.currentUser());
+        return categoryRepository.existsByNameAndUserUsername(category.getName(), userService.currentUser());
     }
 
     @Override
     public boolean isCategoryHaveRelations(int id) {
-        return expenseRepository.existsByCategoryIdAndUser(id, userService.currentUser());
+        return expenseRepository.existsByCategoryIdAndUserUsername(id, userService.currentUser());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CategoryJpaService implements CategoryService {
     }
 
     private void validateCategoryOwner(Category category) {
-        if (!userService.currentUser().equals(category.getUser())) {
+        if (!userService.currentUser().equals(category.getUser().getUsername())) {
             throw new IllegalArgumentException("Operation with another user's category is prohibited");
         }
     }

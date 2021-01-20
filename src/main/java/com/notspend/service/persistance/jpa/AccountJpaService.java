@@ -32,12 +32,12 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public List<Account> getAccounts() {
-        return accountRepository.getAllByUser(userService.currentUser());
+        return accountRepository.getAllByUserUsername(userService.currentUser());
     }
 
     @Override
     public Account getAccount(int id) {
-        return accountRepository.getByIdAndUser(id, userService.currentUser()).orElseThrow(
+        return accountRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no account with id " + id + " in repository " +
                         "for current user " + SecurityUserHandler.getCurrentUser())
         );
@@ -45,7 +45,7 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public void deleteAccountById(int id) {
-        accountRepository.deleteByIdAndUser(id, userService.currentUser());
+        accountRepository.deleteByIdAndUserUsername(id, userService.currentUser());
     }
 
     public void deleteAccount(Account account) {
@@ -61,7 +61,7 @@ public class AccountJpaService implements AccountService {
 
     @Override
     public boolean isAccountHaveRelations(int accountId) {
-        return expenseRepository.existsByAccountIdAndUser(accountId, userService.currentUser());
+        return expenseRepository.existsByAccountIdAndUserUsername(accountId, userService.currentUser());
     }
 
     @Override
@@ -120,7 +120,7 @@ public class AccountJpaService implements AccountService {
     }
 
     private void validateAccountOwner(Account account) {
-        if (!userService.currentUser().equals(account.getUser())) {
+        if (!userService.currentUser().equals(account.getUser().getUsername())) {
             throw new IllegalArgumentException("Operation with another user's account is prohibited");
         }
     }
