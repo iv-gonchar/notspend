@@ -2,8 +2,8 @@ package com.notspend.cotroller;
 
 import com.notspend.entity.Category;
 import com.notspend.entity.User;
-import com.notspend.service.CategoryService;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.CategoryService;
+import com.notspend.service.persistance.UserService;
 import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

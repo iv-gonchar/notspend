@@ -1,4 +1,4 @@
-package com.notspend.service.impl.sync;
+package com.notspend.service.sync;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,11 +6,10 @@ import com.notspend.entity.Account;
 import com.notspend.entity.Category;
 import com.notspend.entity.Expense;
 import com.notspend.exception.AccountSyncFailedException;
-import com.notspend.service.AccountService;
-import com.notspend.service.CategoryService;
-import com.notspend.service.ExpenseService;
-import com.notspend.service.ExpenseSyncService;
-import com.notspend.service.MccService;
+import com.notspend.service.persistance.AccountService;
+import com.notspend.service.persistance.CategoryService;
+import com.notspend.service.persistance.ExpenseService;
+import com.notspend.service.persistance.MccService;
 import com.notspend.util.TimeHelper;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.http.HttpResponse;

@@ -1,10 +1,10 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.entity.Category;
 import com.notspend.repository.CategoryRepository;
 import com.notspend.repository.ExpenseRepository;
-import com.notspend.service.CategoryService;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.CategoryService;
+import com.notspend.service.persistance.UserService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;

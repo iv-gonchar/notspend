@@ -1,7 +1,7 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.repository.MccRepository;
-import com.notspend.service.MccService;
+import com.notspend.service.persistance.MccService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

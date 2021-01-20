@@ -2,16 +2,14 @@ package com.notspend.cotroller;
 
 import com.notspend.entity.Expense;
 import com.notspend.entity.Profit;
-import com.notspend.service.ExpenseService;
-import com.notspend.service.ProfitService;
+import com.notspend.service.persistance.ExpenseService;
+import com.notspend.service.view.ProfitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller

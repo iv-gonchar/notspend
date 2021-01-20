@@ -1,15 +1,14 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.entity.User;
 import com.notspend.repository.UserRepository;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.UserService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor

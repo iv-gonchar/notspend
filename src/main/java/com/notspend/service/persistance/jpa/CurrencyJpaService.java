@@ -1,9 +1,9 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.entity.Currency;
 import com.notspend.repository.CurrencyRepository;
-import com.notspend.service.CurrencyService;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.CurrencyService;
+import com.notspend.service.persistance.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

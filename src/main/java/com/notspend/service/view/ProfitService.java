@@ -1,4 +1,4 @@
-package com.notspend.service;
+package com.notspend.service.view;
 
 import com.notspend.entity.Expense;
 import com.notspend.entity.Profit;

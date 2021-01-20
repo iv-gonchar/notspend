@@ -1,8 +1,7 @@
-package com.notspend.service.impl;
+package com.notspend.service.view;
 
 import com.notspend.entity.Expense;
 import com.notspend.entity.Profit;
-import com.notspend.service.ProfitService;
 import com.notspend.util.CurrencyProcessor;
 import org.springframework.stereotype.Service;
 

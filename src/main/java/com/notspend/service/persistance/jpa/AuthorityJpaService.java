@@ -1,8 +1,8 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.entity.Authority;
 import com.notspend.repository.AuthorityRepository;
-import com.notspend.service.AuthorityService;
+import com.notspend.service.persistance.AuthorityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

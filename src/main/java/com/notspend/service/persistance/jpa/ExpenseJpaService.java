@@ -1,11 +1,11 @@
-package com.notspend.service.jpa;
+package com.notspend.service.persistance.jpa;
 
 import com.notspend.entity.Account;
 import com.notspend.entity.Expense;
 import com.notspend.repository.ExpenseRepository;
-import com.notspend.service.AccountService;
-import com.notspend.service.ExpenseService;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.AccountService;
+import com.notspend.service.persistance.ExpenseService;
+import com.notspend.service.persistance.UserService;
 import com.notspend.util.DateHelper;
 import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.notspend.service;
+package com.notspend.service.persistance;
 
 import com.notspend.entity.Category;
 

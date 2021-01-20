@@ -2,8 +2,8 @@ package com.notspend.cotroller;
 
 import com.notspend.entity.Authority;
 import com.notspend.entity.User;
-import com.notspend.service.AuthorityService;
-import com.notspend.service.UserService;
+import com.notspend.service.persistance.AuthorityService;
+import com.notspend.service.persistance.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

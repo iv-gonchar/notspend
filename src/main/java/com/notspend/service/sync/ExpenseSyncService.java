@@ -1,4 +1,4 @@
-package com.notspend.service;
+package com.notspend.service.sync;
 
 import com.notspend.entity.Account;
 import com.notspend.exception.AccountSyncFailedException;

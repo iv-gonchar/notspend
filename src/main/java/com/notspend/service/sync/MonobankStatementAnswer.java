@@ -1,4 +1,4 @@
-package com.notspend.service.impl.sync;
+package com.notspend.service.sync;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
