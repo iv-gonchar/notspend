@@ -162,6 +162,16 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <LOGGING_LEVEL_org.springframework>ERROR</LOGGING_LEVEL_org.springframework>
+                        <LOGGING_LEVEL_ROOT>ERROR</LOGGING_LEVEL_ROOT>
+                        <show_sql>false</show_sql>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
