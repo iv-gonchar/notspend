@@ -19,6 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <javax.servlet.jsp.version>2.3.1</javax.servlet.jsp.version>
+        <org.testcontainers.version>1.15.1</org.testcontainers.version>
     </properties>
 
     <dependencies>
@@ -125,6 +126,21 @@
             <version>3.16.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
         <dependency>
@@ -146,6 +162,18 @@
             <artifactId>jaxb-runtime</artifactId>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${org.testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

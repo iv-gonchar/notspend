@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = RepositoryTestsConfig.class)
+@ContextConfiguration(classes = RepositoryTestsConfig.class, initializers = RepositoryTestsInitializer.class)
 class AuthorityRepositoryIT {
 
     @Autowired
