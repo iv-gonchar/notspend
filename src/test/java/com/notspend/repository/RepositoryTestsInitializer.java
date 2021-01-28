@@ -19,6 +19,7 @@ public class RepositoryTestsInitializer implements ApplicationContextInitializer
                 .withDatabaseName("notspenddb")
                 .withUsername("test")
                 .withPassword("test")
+                .withCommand("--general_log")
                 .withReuse(true);
         mySqlContainer.start();
 
