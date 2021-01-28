@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
@@ -32,7 +35,7 @@ class AuthorityRepositoryIT {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private final User user = new User();
 
