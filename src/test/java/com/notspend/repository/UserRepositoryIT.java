@@ -1,16 +1,12 @@
 package com.notspend.repository;
 
 import com.notspend.entity.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.test.context.ContextConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
@@ -22,9 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // TODO replace demo data from liquibase/changelogs/17_add_demo_data.sql with test data
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = RepositoryTestsConfig.class, initializers = RepositoryTestsInitializer.class)
+@RepositoryTest
 class UserRepositoryIT {
 
     private static final String TEST_USERNAME = "demo";
