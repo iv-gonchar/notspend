@@ -69,13 +69,13 @@ public class AccountJpaService implements AccountService {
     public int replaceAccountInAllExpenses(int fromAccountId, int toAccountId) {
         Account oldAccount = getAccount(fromAccountId);
         Account newAccount = getAccount(toAccountId);
-        long updated = expenseRepository.updateAccountInExpenses(oldAccount, newAccount, userService.currentUser());
+        int updated = expenseRepository.updateAccountInExpenses(oldAccount, newAccount, userService.currentUser());
         double balance = oldAccount.getSummary();
         transferMoney(oldAccount, newAccount, balance);
         // todo maybe remove this line, caller should call both methods?
         deleteAccount(oldAccount);
         // todo change interface to long
-        return (int) updated;
+        return updated;
     }
 
     @Override

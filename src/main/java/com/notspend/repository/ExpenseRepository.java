@@ -20,7 +20,7 @@ public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer
     @Modifying //(clearAutomatically = true) should be uncommented in case of errors
     // todo remove user from arguments by using SpEL instead
     @Query("UPDATE Expense SET account = ?2 WHERE account = ?1 AND user.username = ?3")
-    long updateAccountInExpenses(Account oldAccount, Account newAccount, String username);
+    int updateAccountInExpenses(Account oldAccount, Account newAccount, String username);
 
     @Modifying //(clearAutomatically = true) should be uncommented in case of errors
     @Query("UPDATE Expense SET category = ?2 WHERE category = ?1 AND user.username = ?3")
