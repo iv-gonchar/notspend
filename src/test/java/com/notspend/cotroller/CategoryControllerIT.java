@@ -23,10 +23,6 @@ class CategoryControllerIT {
     @Autowired
     CategoryController categoryController;
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void listExpenseCategories() throws Exception {
         mockMvc.perform(
