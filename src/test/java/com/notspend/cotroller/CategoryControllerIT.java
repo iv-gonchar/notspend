@@ -8,17 +8,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,9 +43,7 @@ class CategoryControllerIT {
     @Test
     void listExpenseCategories() throws Exception {
         mockMvc.perform(
-                get("/category/allexpense")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                get("/category/allexpense").with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/all"))
                 .andExpect(model().attribute("categories", hasSize(9)))
@@ -57,9 +54,7 @@ class CategoryControllerIT {
     @Test
     void listIncomeCategories() throws Exception {
         mockMvc.perform(
-                get("/category/allincome")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                get("/category/allincome").with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/all"))
                 .andExpect(model().attribute("categories", hasSize(4)))
@@ -70,9 +65,7 @@ class CategoryControllerIT {
     @Test
     void addCategory() throws Exception {
         mockMvc.perform(
-                get("/category/add")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                get("/category/add").with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/add"))
                 .andExpect(model().attribute("category", hasProperty("id", is(0))))
@@ -93,8 +86,7 @@ class CategoryControllerIT {
                         .param("name", "TestCategory")
                         .param("description", "Test category description")
                         .param("income", "false")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
@@ -106,8 +98,7 @@ class CategoryControllerIT {
                 post("/category/addProcess")
                         .with(csrf().asHeader())
                         .param("name", "Salary")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/nameexist"))
                 .andExpect(model().attribute("category", hasProperty("name", equalTo("Salary"))));
@@ -120,8 +111,7 @@ class CategoryControllerIT {
                 post("/category/addProcess")
                         .with(csrf().asHeader())
                         .param("name", "")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/add"));
     }
@@ -133,8 +123,7 @@ class CategoryControllerIT {
                 get("/category/delete")
                         .with(csrf().asHeader())
                         .param("categoryId", "11")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
@@ -147,8 +136,7 @@ class CategoryControllerIT {
                 get("/category/delete")
                         .with(csrf().asHeader())
                         .param("categoryId", "1")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/cantdelete"))
                 .andExpect(model().attribute("categoryToDelete", hasProperty("id", equalTo(1))))
@@ -163,8 +151,7 @@ class CategoryControllerIT {
         mockMvc.perform(
                 get("/category/delete")
                         .with(csrf().asHeader())
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk());
     }
 
@@ -176,8 +163,7 @@ class CategoryControllerIT {
                 get("/category/delete")
                         .with(csrf().asHeader())
                         .param("categoryId", "123")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk());
     }
 
@@ -187,8 +173,7 @@ class CategoryControllerIT {
                 get("/category/update")
                         .with(csrf().asHeader())
                         .param("categoryId", "1")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category/update"))
                 .andExpect(model().attribute("category", hasProperty("id", equalTo(1))))
@@ -203,8 +188,7 @@ class CategoryControllerIT {
                 get("/category/update")
                         .with(csrf().asHeader())
                         .param("categoryId", "123")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk());
     }
 
@@ -218,8 +202,7 @@ class CategoryControllerIT {
                         .param("income", "true")
                         .param("name", "SalaryUpdated")
                         .param("description", "UpdatedDescription")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("allincome"));
     }
@@ -234,8 +217,7 @@ class CategoryControllerIT {
                         .param("income", "false")
                         .param("name", "FoodUpdated")
                         .param("description", "UpdatedDescription")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("allexpense"));
     }
@@ -247,8 +229,7 @@ class CategoryControllerIT {
         mockMvc.perform(
                 post("/category/updateprocess")
                         .with(csrf().asHeader())
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("allexpense"));
     }
@@ -262,8 +243,7 @@ class CategoryControllerIT {
                         .with(csrf().asHeader())
                         .param("id", "123")
                         .param("name", "NotExisting")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("allexpense"));
     }
@@ -276,8 +256,7 @@ class CategoryControllerIT {
                         .with(csrf().asHeader())
                         .param("categoryId", "6")
                         .param("categoryToDelete", "7")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
@@ -290,8 +269,7 @@ class CategoryControllerIT {
                         .with(csrf().asHeader())
                         .param("categoryId", "6")
                         .param("categoryToDelete", "6")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
@@ -305,8 +283,7 @@ class CategoryControllerIT {
                         .with(csrf().asHeader())
                         .param("categoryId", "6")
                         .param("categoryToDelete", "123")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
@@ -321,8 +298,7 @@ class CategoryControllerIT {
                         .param("description", "Category to replace food")
                         .param("income", "false")
                         .param("categoryToDelete", "6")
-                        .header(HttpHeaders.AUTHORIZATION,
-                                "Basic " + Base64Utils.encodeToString("demo:demo".getBytes())))
+                        .with(user("demo").password("demo")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("success"));
     }
