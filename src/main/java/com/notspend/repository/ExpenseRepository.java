@@ -24,7 +24,7 @@ public interface ExpenseRepository extends CrudByUserRepository<Expense, Integer
 
     @Modifying //(clearAutomatically = true) should be uncommented in case of errors
     @Query("UPDATE Expense SET category = ?2 WHERE category = ?1 AND user.username = ?3")
-    long updateCategoryInExpenses(Category oldCategory, Category newCategory, String username);
+    int updateCategoryInExpenses(Category oldCategory, Category newCategory, String username);
 
     @Query("SELECT SUM(e.sum) FROM Expense e LEFT JOIN e.category " +
             "WHERE e.category.income = FALSE AND e.date BETWEEN ?1 AND ?2 AND e.user.username = ?3")

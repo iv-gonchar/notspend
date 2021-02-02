@@ -83,9 +83,9 @@ public class CategoryJpaService implements CategoryService {
     public int replaceCategoryInAllExpenses(int oldCategoryId, int newCategoryId) {
         Category oldCategory = getCategory(oldCategoryId);
         Category newCategory = getCategory(newCategoryId);
-        long updated = expenseRepository.updateCategoryInExpenses(oldCategory, newCategory, userService.currentUser());
+        int updated = expenseRepository.updateCategoryInExpenses(oldCategory, newCategory, userService.currentUser());
         deleteCategoryById(oldCategoryId);
-        return (int) updated;
+        return updated;
     }
 
     private void validateCategoryOwner(Category category) {
