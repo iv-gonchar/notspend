@@ -1,5 +1,6 @@
 package com.notspend.repository;
 
+import com.notspend.TestDatabaseInitializer;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +14,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = RepositoryTestsConfig.class, initializers = RepositoryTestsInitializer.class)
+@ContextConfiguration(classes = RepositoryTestsConfig.class, initializers = TestDatabaseInitializer.class)
 public @interface RepositoryTest {
 }

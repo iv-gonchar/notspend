@@ -1,4 +1,4 @@
-package com.notspend.repository;
+package com.notspend;
 
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
@@ -10,7 +10,7 @@ import org.testcontainers.containers.MySQLContainerProvider;
  * Starts MySQL test container and set datasource properties in test ApplicationContext
  * during Spring context initialization
  */
-public class RepositoryTestsInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class TestDatabaseInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {

@@ -1,6 +1,6 @@
 package com.notspend.cotroller;
 
-import com.notspend.repository.RepositoryTestsInitializer;
+import com.notspend.TestDatabaseInitializer;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 @AutoConfigureMockMvc
 @AutoConfigureDataJpa
 // specifies configuration for our beans and initializer which starts MySql in container
-@ContextConfiguration(classes = ControllerTestConfig.class, initializers = RepositoryTestsInitializer.class)
+@ContextConfiguration(classes = ControllerTestConfig.class, initializers = TestDatabaseInitializer.class)
 // runs junits with Spring extension
 @ExtendWith(SpringExtension.class)
 // specify test properties file location
