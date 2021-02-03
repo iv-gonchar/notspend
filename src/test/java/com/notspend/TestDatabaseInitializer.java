@@ -19,8 +19,8 @@ public class TestDatabaseInitializer implements ApplicationContextInitializer<Co
                 .withDatabaseName("notspenddb")
                 .withUsername("test")
                 .withPassword("test")
-                .withCommand("--general_log")
-                .withReuse(true);
+                .withCommand("--general_log");
+//                .withReuse(true);
         mySqlContainer.start();
 
         TestPropertyValues.of(
