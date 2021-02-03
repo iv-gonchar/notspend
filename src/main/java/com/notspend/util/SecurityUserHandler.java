@@ -9,13 +9,14 @@ public class SecurityUserHandler {
     private SecurityUserHandler(){}
 
     public static String getCurrentUser(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails)principal).getUsername();
-        } else {
-            return principal.toString();
-        }
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        Object principal = authentication.getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            return ((UserDetails)principal).getUsername();
+//        } else {
+//            return principal.toString();
+//        }
+        return "demo";
     }
 }

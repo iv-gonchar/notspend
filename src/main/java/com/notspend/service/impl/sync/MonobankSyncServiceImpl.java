@@ -46,7 +46,7 @@ public class MonobankSyncServiceImpl implements ExpenseSyncService {
 
     private static final int MAX_MONOBANK_STATEMENT_TIME_IN_SECONDS = 2682000; // s (1 month)
 
-    private static final String MONOBANK_API_ENDPOINT = "https://api.monobank.ua/";
+    private static final String MONOBANK_API_ENDPOINT = "http://localhost:1080/";
 
     private static final int DEFAULT_CARD_NUMBER = 0;
 
