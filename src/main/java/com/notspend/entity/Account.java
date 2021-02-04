@@ -15,9 +15,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "account")
 public class Account {
 
-    @Version
-    private Integer version;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")

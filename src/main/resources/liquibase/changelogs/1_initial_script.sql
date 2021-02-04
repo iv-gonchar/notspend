@@ -52,7 +52,6 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`account` (
   `type` VARCHAR(50) NOT NULL,
   `summary` DECIMAL(18,2) NOT NULL,
   `description` VARCHAR(300) NOT NULL,
-  `version` INT NOT NULL,
   PRIMARY KEY (`account_id`))
 ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
