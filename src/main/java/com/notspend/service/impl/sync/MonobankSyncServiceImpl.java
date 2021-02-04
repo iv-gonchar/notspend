@@ -94,13 +94,9 @@ public class MonobankSyncServiceImpl implements ExpenseSyncService {
     @Transactional
     private void syncAccount(Account account){
         Session session = sessionFactory.getCurrentSession();
-        Account lockedAccount = session.find(Account.class, account.getAccountId());
+        Account lockedAccount = session.find(Account.class, account.getAccountId(), LockModeType.PESSIMISTIC_WRITE);
         log.debug("Account with id: " + lockedAccount.getAccountId() + "' locked");
-        session.lock(lockedAccount, LockModeType.PESSIMISTIC_WRITE);
-
         log.debug("Start to sync account with id: '" + lockedAccount.getAccountId() + "'");
-        //Refresh account
-        lockedAccount = accountService.getAccount(lockedAccount.getAccountId());
         long delayBetweenSync = TEN_MINUTES + 1;
         if (lockedAccount.getSynchronizationTime() != null) {
             delayBetweenSync = TimeHelper.getCurrentEpochTime() - lockedAccount.getSynchronizationTime();
