@@ -8,10 +8,10 @@ INSERT INTO user (username, email, password, name, surname, enabled) VALUES
     ('demo', 'demo@demo.com', '$2a$10$iQXJ7lGfanJdq8.qUEoRq.US4MZzlA4at5XHfzgqQWICp8hQVZp9O', 'Demo', 'Demonov', 1);
 INSERT INTO authority (username, authority) VALUES ('demo', 'ROLE_USER');
 
-INSERT INTO account (type, summary, description, username, currency_code) VALUES
-    ('Cash', 0.0, 'Cash in wallet', 'demo', 'UAH'),
-    ('Debit Card', 0.0, 'Salary debit card', 'demo', 'UAH'),
-    ('USD Deposit', 9660.45, 'Foreign Currency Deposit', 'demo', 'USD');
+INSERT INTO account (type, summary, description, username, currency_code, version) VALUES
+    ('Cash', 0.0, 'Cash in wallet', 'demo', 'UAH', 0),
+    ('Debit Card', 0.0, 'Salary debit card', 'demo', 'UAH', 0),
+    ('USD Deposit', 9660.45, 'Foreign Currency Deposit', 'demo', 'USD', 0);
 
 INSERT INTO category (name, description, username, income) VALUES
     ('Salary', 'Salary category', 'demo', 1),
