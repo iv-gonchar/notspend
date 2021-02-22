@@ -1,1 +1,0 @@
-ALTER TABLE notspenddb.expense MODIFY COLUMN `date` DATE;

@@ -1,1 +1,0 @@
-ALTER TABLE notspenddb.account ADD synchronization_time BIGINT;
