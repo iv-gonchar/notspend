@@ -1,5 +1,6 @@
 package com.notspend.cotroller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -106,6 +107,7 @@ class AccountControllerIT {
     }
 
     @Test
+    @Disabled("it depends on currency exchange rate")
     void transferMoneyBetweenAccounts() throws Exception {
         mockMvc.perform(get("/account/transfer")
                 .with(user("demo").password("demo")))
