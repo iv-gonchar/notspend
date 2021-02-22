@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`user` (
   `name` VARCHAR(50) NULL,
   `password` VARCHAR(200) NOT NULL,
   `surname` VARCHAR(50) NULL,
-  PRIMARY KEY (`username`),
-  )
+  PRIMARY KEY (`username`))
 ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- -----------------------------------------------------
@@ -97,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`account` (
     FOREIGN KEY (`currency_code`)
     REFERENCES `notspenddb`.`currency` (`code`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE NO ACTION
   )
 ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
@@ -113,10 +112,9 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`expense` (
   `date` DATE NOT NULL,
   `time` TIME(0) NOT NULL,
   `comment` VARCHAR(50) NULL,
-  `username` VARCHAR(50) NOT NULL
+  `username` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`expense_id`),
-  INDEX `fk_expense_category1_idx` (`category_id` ASC),
-  CONSTRAINT `fk_account_id`
+  CONSTRAINT `fk_expense_account`
     FOREIGN KEY (`account_id`)
     REFERENCES `notspenddb`.`account` (`account_id`)
     ON DELETE NO ACTION
@@ -135,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`expense` (
     FOREIGN KEY (`username`)
     REFERENCES `notspenddb`.`user` (`username`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON UPDATE NO ACTION,
+  INDEX `fk_expense_category1_idx` (`category_id` ASC)
   )
 ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
