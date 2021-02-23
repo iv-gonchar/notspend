@@ -1,4 +1,17 @@
 -- -----------------------------------------------------
+-- Remove demo data
+-- -----------------------------------------------------
+DELETE FROM expense WHERE username = 'demo';
+DELETE FROM category WHERE username = 'demo';
+DELETE FROM account WHERE username = 'demo';
+DELETE FROM authority WHERE username = 'demo';
+DELETE FROM user WHERE username = 'demo';
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE currency;
+SET FOREIGN_KEY_CHECKS=1;
+TRUNCATE TABLE mcc;
+
+-- -----------------------------------------------------
 -- Insert currency data
 -- -----------------------------------------------------
 INSERT INTO currency (name, code, symbol) VALUES
@@ -1260,12 +1273,6 @@ INSERT INTO mcc (mcc_id, description, category_name) VALUES
 -- -----------------------------------------------------
 -- Insert demo data
 -- -----------------------------------------------------
-DELETE FROM expense WHERE username = 'demo';
-DELETE FROM category WHERE username = 'demo';
-DELETE FROM account WHERE username = 'demo';
-DELETE FROM authority WHERE username = 'demo';
-DELETE FROM user WHERE username = 'demo';
-
 INSERT INTO user (username, email, password, name, surname, enabled) VALUES
     ('demo', 'demo@demo.com', '$2a$10$iQXJ7lGfanJdq8.qUEoRq.US4MZzlA4at5XHfzgqQWICp8hQVZp9O', 'Demo', 'Demonov', 1);
 INSERT INTO authority (username, authority) VALUES ('demo', 'ROLE_USER');
