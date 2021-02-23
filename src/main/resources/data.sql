@@ -1,12 +1,12 @@
 -- -----------------------------------------------------
 -- Remove demo data
 -- -----------------------------------------------------
-DELETE FROM expense WHERE username = 'demo';
-DELETE FROM category WHERE username = 'demo';
-DELETE FROM account WHERE username = 'demo';
-DELETE FROM authority WHERE username = 'demo';
-DELETE FROM user WHERE username = 'demo';
 SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE expense;
+TRUNCATE TABLE account;
+TRUNCATE TABLE category;
+TRUNCATE TABLE authority;
+TRUNCATE TABLE user;
 TRUNCATE TABLE currency;
 SET FOREIGN_KEY_CHECKS=1;
 TRUNCATE TABLE mcc;
