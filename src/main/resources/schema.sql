@@ -45,6 +45,28 @@ CREATE TABLE IF NOT EXISTS `notspenddb`.`currency` (
 ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- -----------------------------------------------------
+-- Table `notspenddb`.`exchange_rate`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `notspenddb`.`exchange_rate` (
+  `base_currency` VARCHAR(3) NOT NULL,
+  `target_currency` VARCHAR(3) NOT NULL,
+  `rate` DECIMAL(15,9) NOT NULL,
+  `exchange_date` DATE NOT NULL,
+  PRIMARY KEY (`base_currency`, `target_currency`, `exchange_date`),
+  CONSTRAINT `fk_base_currency`
+    FOREIGN KEY (`base_currency`)
+    REFERENCES `notspenddb`.`currency` (`code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_target_currency`
+    FOREIGN KEY (`target_currency`)
+    REFERENCES `notspenddb`.`currency` (`code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+  )
+ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- -----------------------------------------------------
 -- Table `notspenddb`.`mcc`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `notspenddb`.`mcc` (
