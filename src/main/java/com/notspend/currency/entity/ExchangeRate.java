@@ -1,6 +1,5 @@
 package com.notspend.currency.entity;
 
-import com.notspend.entity.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,14 +19,12 @@ import java.time.LocalDate;
 public class ExchangeRate {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "base_currency")
-    private Currency base;
+    @Column(name = "base_currency")
+    private String base;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "target_currency")
-    private Currency target;
+    @Column(name = "target_currency")
+    private String target;
 
     @Id
     @Column(name = "exchange_date")

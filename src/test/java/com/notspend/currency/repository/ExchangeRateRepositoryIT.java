@@ -1,10 +1,7 @@
 package com.notspend.currency.repository;
 
 import com.notspend.currency.entity.ExchangeRate;
-import com.notspend.entity.Currency;
-import com.notspend.repository.CurrencyRepository;
 import com.notspend.repository.RepositoryTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,35 +18,18 @@ class ExchangeRateRepositoryIT {
     private ExchangeRateRepository exchangeRateRepository;
 
     @Autowired
-    private CurrencyRepository currencyRepository;
-
-    @Autowired
     private EntityManager entityManager;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private Currency uah;
-
-    private Currency eur;
-
-    private Currency sek;
-
-    private LocalDate date;
-
-    @BeforeEach
-    void setUp() {
-        uah = currencyRepository.getByCode("UAH").get();
-        eur = currencyRepository.getByCode("EUR").get();
-        sek = currencyRepository.getByCode("SEK").get();
-        date = LocalDate.of(2021, 3, 3);
-    }
+    private LocalDate date = LocalDate.of(2021, 3, 3);
 
     @Test
     void save() {
         Double expectedRate = 2.6003;
 
-        ExchangeRate sekToUah = new ExchangeRate(uah, sek, date, expectedRate);
+        ExchangeRate sekToUah = new ExchangeRate("UAH", "SEK", date, expectedRate);
         exchangeRateRepository.save(sekToUah);
         entityManager.flush();
 
@@ -63,7 +43,7 @@ class ExchangeRateRepositoryIT {
     void findByBaseAndTargetAndExchangeDate() {
         Double expectedRate = 33.6006;
 
-        ExchangeRate eurToUah = exchangeRateRepository.findByBaseAndTargetAndExchangeDate(uah, eur, date).get();
+        ExchangeRate eurToUah = exchangeRateRepository.findByBaseAndTargetAndExchangeDate("UAH", "EUR", date).get();
         assertEquals(expectedRate, eurToUah.getRate());
     }
 }

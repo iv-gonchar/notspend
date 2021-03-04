@@ -12,5 +12,5 @@ public interface ExchangeRateRepository extends Repository<ExchangeRate, Exchang
 
     ExchangeRate save(ExchangeRate rate);
 
-    Optional<ExchangeRate> findByBaseAndTargetAndExchangeDate(Currency base, Currency target, LocalDate exchangeDate);
+    Optional<ExchangeRate> findByBaseAndTargetAndExchangeDate(String base, String target, LocalDate exchangeDate);
 }
