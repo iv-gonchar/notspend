@@ -1,9 +1,7 @@
 package com.notspend.currency.entity;
 
 import com.notspend.entity.Currency;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,9 +14,9 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class ExchangeRateId implements Serializable {
 
-    private Currency base;
+    private String base;
 
-    private Currency target;
+    private String target;
 
     private LocalDate exchangeDate;
 }
