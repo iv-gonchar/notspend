@@ -1,4 +1,4 @@
-package com.notspend.currency.service.exchange.client;
+package com.notspend.currency.service.api.client;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.notspend.currency.entity.ExchangeRate;

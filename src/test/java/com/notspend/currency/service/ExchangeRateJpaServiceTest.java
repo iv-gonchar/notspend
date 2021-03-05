@@ -1,9 +1,9 @@
-package com.notspend.currency.service.exchange;
+package com.notspend.currency.service;
 
 import com.notspend.currency.entity.ExchangeRate;
 import com.notspend.currency.repository.ExchangeRateRepository;
-import com.notspend.currency.service.exchange.client.ExchangeApiClient;
-import com.notspend.currency.service.exchange.client.ExchangeApiClientFactory;
+import com.notspend.currency.service.api.client.ExchangeApiClient;
+import com.notspend.currency.service.api.client.ExchangeApiClientFactory;
 import com.notspend.entity.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
