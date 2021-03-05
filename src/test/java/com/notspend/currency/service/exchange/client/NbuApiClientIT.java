@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Disabled("Depends on 3rd party server. Used only to debug response processing")
 class NbuApiClientIT {
 
-    private final NbuApiClient client = new NbuApiClient();
+    private static final String CURRENT_API = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode={code}&date={date}&json";
+
+    private final NbuApiClient client = new NbuApiClient(CURRENT_API);
 
     @Test
     void getExchangeRate() {

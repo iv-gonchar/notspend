@@ -21,24 +21,21 @@ import java.util.Optional;
 @CommonsLog
 class NbuApiClient implements ExchangeApiClient {
 
-    private static final String HOST = "https://bank.gov.ua/";
-
-    private static final String API = "NBUStatService/v1/statdirectory/exchange?";
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private final RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 
-    private final UriComponents uriComponents = UriComponentsBuilder
-            .fromUriString(HOST + API)
-            .queryParam("valcode", "{code}")
-            .queryParam("date", "{date}")
-            .queryParam("json")
-            .encode()
-            .build();
+    private final UriComponents uriComponents;
+
+    public NbuApiClient(String api) {
+        uriComponents = UriComponentsBuilder
+                .fromUriString(api)
+                .encode()
+                .build();
+    }
 
     public Optional<ExchangeRate> getExchangeRate(String target, LocalDate date) {
-        URI uri = uriComponents.expand(target, date.format(formatter)).toUri();
+        URI uri = uriComponents.expand(target, date.format(yyyyMMdd)).toUri();
         try {
             NbuExchangeRate[] rates = template.getForObject(uri, NbuExchangeRate[].class);
             NbuExchangeRate rate = NbuExchangeRate.getFirst(rates);

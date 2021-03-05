@@ -18,16 +18,7 @@ public class ExchangeRateJpaService {
 
     private final ExchangeApiClientFactory factory;
 
-    @Autowired
-    public ExchangeRateJpaService(ExchangeRateRepository repository) {
-        this.repository = repository;
-        factory = new ExchangeApiClientFactory();
-    }
-
-    /**
-     * Constructor for unit-tests
-     */
-    ExchangeRateJpaService(ExchangeRateRepository repository, ExchangeApiClientFactory factory) {
+    public ExchangeRateJpaService(ExchangeRateRepository repository, ExchangeApiClientFactory factory) {
         this.repository = repository;
         this.factory = factory;
     }
