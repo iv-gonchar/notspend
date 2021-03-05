@@ -5,11 +5,12 @@ import com.notspend.currency.repository.ExchangeRateRepository;
 import com.notspend.currency.service.api.client.ExchangeApiClient;
 import com.notspend.currency.service.api.client.ExchangeApiClientFactory;
 import com.notspend.entity.Currency;
+import com.notspend.service.persistance.ExchangeRateService;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class ExchangeRateJpaService {
+public class ExchangeRateJpaService implements ExchangeRateService {
 
     private final ExchangeRateRepository repository;
 
