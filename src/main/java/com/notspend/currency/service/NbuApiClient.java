@@ -1,6 +1,6 @@
 package com.notspend.currency.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.notspend.currency.entity.ExchangeRate;
 import lombok.Data;
 import lombok.extern.apachecommons.CommonsLog;
@@ -40,27 +40,19 @@ class NbuApiClient {
     public Optional<ExchangeRate> getExchangeRate(String target, LocalDate date) {
         URI uri = uriComponents.expand(target, date.format(formatter)).toUri();
         try {
-            NbuExchangeRate rate = template.getForObject(uri, NbuExchangeRate.class);
+            NbuExchangeRate[] rates = template.getForObject(uri, NbuExchangeRate[].class);
+            NbuExchangeRate rate = NbuExchangeRate.getFirst(rates);
             return Optional.of(rate.toExchangeRate());
         } catch (RestClientException e) {
-            log.error("Currency server is down", e);
+            log.error("Exception happened during handling response from NBU API server", e);
+        } catch (IllegalStateException e) {
+            log.error("Wrong response was received", e);
         }
         return Optional.empty();
     }
 
     @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class NbuExchangeRate {
-//
-//        /**
-//         * Currency number
-//         */
-//        private int r030;
-//
-//        /**
-//         * Currency name
-//         */
-//        private String txt;
 
         /**
          * Currency code
@@ -69,11 +61,23 @@ class NbuApiClient {
 
         private double rate;
 
-        private LocalDate exchangedate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+        private LocalDate exchangeDate;
 
         public ExchangeRate toExchangeRate() {
-            return new ExchangeRate("UAH", cc.toUpperCase(), exchangedate, rate);
+            return new ExchangeRate("UAH", cc.toUpperCase(), exchangeDate, rate);
+        }
+
+        public static NbuExchangeRate getFirst(NbuExchangeRate[] rates) {
+            if (rates.length == 0) {
+                throw new IllegalArgumentException("Response is empty. Check request parameters sent");
+            }
+            if (rates.length != 1) {
+                throw new IllegalArgumentException("Response array size doesn't equal 1. Unexpected response");
+            }
+            return rates[0];
         }
 
     }
+
 }
