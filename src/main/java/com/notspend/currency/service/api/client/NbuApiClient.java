@@ -1,6 +1,7 @@
 package com.notspend.currency.service.api.client;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.notspend.currency.entity.ExchangeRate;
 import lombok.Data;
 import lombok.extern.apachecommons.CommonsLog;
@@ -51,18 +52,17 @@ class NbuApiClient implements ExchangeApiClient {
     @Data
     private static class NbuExchangeRate {
 
-        /**
-         * Currency code
-         */
-        private String cc;
+        @JsonProperty("cc")
+        private String currencyCode;
 
         private double rate;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+        @JsonProperty("exchangedate")
         private LocalDate exchangeDate;
 
         public ExchangeRate toExchangeRate() {
-            return new ExchangeRate("UAH", cc.toUpperCase(), exchangeDate, rate);
+            return new ExchangeRate("UAH", currencyCode.toUpperCase(), exchangeDate, rate);
         }
 
         public static NbuExchangeRate getFirst(NbuExchangeRate[] rates) {

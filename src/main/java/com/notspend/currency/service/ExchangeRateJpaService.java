@@ -22,6 +22,9 @@ public class ExchangeRateJpaService implements ExchangeRateService {
     }
 
     public double getExchangeRateToUah(Currency target) {
+        if (target.getCode().equals("UAH")) {
+            return 1.0;
+        }
         return getExchangeRate(new Currency("UAH"), target, LocalDate.now());
     }
 
