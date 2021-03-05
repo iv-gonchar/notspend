@@ -1,4 +1,4 @@
-package com.notspend.currency.service;
+package com.notspend.currency.service.exchange.client;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.notspend.currency.entity.ExchangeRate;
@@ -19,7 +19,7 @@ import java.util.Optional;
  * National bank of Ukraine API client
  */
 @CommonsLog
-class NbuApiClient {
+class NbuApiClient implements ExchangeApiClient {
 
     private static final String HOST = "https://bank.gov.ua/";
 

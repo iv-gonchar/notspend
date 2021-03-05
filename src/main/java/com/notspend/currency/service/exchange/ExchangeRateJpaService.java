@@ -1,7 +1,9 @@
-package com.notspend.currency.service;
+package com.notspend.currency.service.exchange;
 
 import com.notspend.currency.entity.ExchangeRate;
 import com.notspend.currency.repository.ExchangeRateRepository;
+import com.notspend.currency.service.exchange.client.ExchangeApiClient;
+import com.notspend.currency.service.exchange.client.ExchangeApiClientFactory;
 import com.notspend.entity.Currency;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class ExchangeRateJpaService {
 
     private final ExchangeRateRepository repository;
 
-    private final NbuApiClient client = new NbuApiClient();
+    private final ExchangeApiClientFactory factory = new ExchangeApiClientFactory();
 
     public ExchangeRateJpaService(ExchangeRateRepository repository) {
         this.repository = repository;
@@ -31,13 +33,18 @@ public class ExchangeRateJpaService {
         if (rate.isPresent()) {
             return rate.get().getRate();
         } else {
-            rate = client.getExchangeRate(target.getCode(), date);
-            if (rate.isPresent()) {
-                repository.save(rate.get());
-                return rate.get().getRate();
-            } else {
-                return 0.0;
-            }
+            return getFromApiAndSave(base, target, date);
+        }
+    }
+
+    private double getFromApiAndSave(Currency base, Currency target, LocalDate date) {
+        ExchangeApiClient client = factory.createClient(base.getCode());
+        Optional<ExchangeRate> rate = client.getExchangeRate(target.getCode(), date);
+        if (rate.isPresent()) {
+            repository.save(rate.get());
+            return rate.get().getRate();
+        } else {
+            return 0.0;
         }
     }
 
