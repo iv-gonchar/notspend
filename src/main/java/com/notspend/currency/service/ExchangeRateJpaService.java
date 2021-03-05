@@ -21,8 +21,8 @@ public class ExchangeRateJpaService implements ExchangeRateService {
         this.factory = factory;
     }
 
-    public double getExchangeRate(Currency base, Currency target) {
-        return getExchangeRate(base, target, LocalDate.now());
+    public double getExchangeRateToUah(Currency target) {
+        return getExchangeRate(new Currency("UAH"), target, LocalDate.now());
     }
 
     double getExchangeRate(Currency base, Currency target, LocalDate date) {

@@ -7,6 +7,7 @@ import com.notspend.entity.Expense;
 import com.notspend.entity.User;
 import com.notspend.exception.AccountSyncFailedException;
 import com.notspend.service.persistance.CategoryService;
+import com.notspend.service.persistance.ExchangeRateService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.sync.ExpenseSyncService;
 import com.notspend.service.persistance.UserService;
@@ -41,6 +42,9 @@ public class MainPage {
 
     @Autowired
     private ExpenseSyncService expenseSyncService;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
 
     @GetMapping(value = "/")
     public String getMainPage(HttpServletRequest request){
