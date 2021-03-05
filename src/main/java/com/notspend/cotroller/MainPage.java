@@ -1,18 +1,13 @@
 package com.notspend.cotroller;
 
-import com.notspend.entity.Account;
-import com.notspend.entity.Category;
-import com.notspend.entity.Currency;
-import com.notspend.entity.Expense;
-import com.notspend.entity.User;
+import com.notspend.entity.*;
 import com.notspend.exception.AccountSyncFailedException;
 import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.ExchangeRateService;
 import com.notspend.service.persistance.ExpenseService;
-import com.notspend.service.sync.ExpenseSyncService;
 import com.notspend.service.persistance.UserService;
+import com.notspend.service.sync.ExpenseSyncService;
 import com.notspend.util.CalculationHelper;
-import com.notspend.util.CurrencyProcessor;
 import com.notspend.util.SecurityUserHandler;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +42,12 @@ public class MainPage {
     private ExchangeRateService exchangeRateService;
 
     @GetMapping(value = "/")
-    public String getMainPage(HttpServletRequest request){
+    public String getMainPage(HttpServletRequest request) {
         String username = SecurityUserHandler.getCurrentUser();
         User user = userService.getUser(username);
         List<Account> accountList = user.getAccounts();
         List<Account> accountsToSync = accountList.stream().filter(a -> a.getToken() != null && !a.getToken().isEmpty()).collect(Collectors.toList());
-        if (!accountsToSync.isEmpty()){
+        if (!accountsToSync.isEmpty()) {
             try {
                 expenseSyncService.syncDataWithBankServer(accountsToSync);
             } catch (AccountSyncFailedException e) {
@@ -69,7 +64,14 @@ public class MainPage {
         request.getSession().setAttribute("spendCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(expenseDuringCurrentMonth)));
         request.getSession().setAttribute("earnCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(incomeDuringCurrentMonth)));
 
-        //Data for year income graph
+        computeDataForYearIncomeChart(request);
+        computeDataForMonthExpenseChart(request);
+        computeMonthExpensesByCategory(request);
+        computeExchangeRates(request, accountList);
+        return "index";
+    }
+
+    private void computeDataForYearIncomeChart(HttpServletRequest request) {
         List<Expense> incomeDuringLastYear = expenseService.getAllIncomeDuringYear();
         List<Double> incomeSumForEachMonth = new ArrayList<>();
         List<String> monthNames = new ArrayList<>();
@@ -79,28 +81,29 @@ public class MainPage {
             int currentMonthNumber = getRightMonthOrder(i);
             for (Expense expense : incomeDuringLastYear) {
                 if ((expense.getDate().getMonthValue()) == currentMonthNumber) {
-                    monthSum += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * CurrencyProcessor.getCurrencyRateToUah(expense.getCurrency().getCode());
+                    monthSum += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * exchangeRateService.getExchangeRateToUah(expense.getCurrency());
                 }
             }
             incomeSumForEachMonth.add(monthSum);
             String monthName = Month.of(currentMonthNumber).name();
-            monthNames.add(monthName.substring(0,3));
+            monthNames.add(monthName.substring(0, 3));
         }
         String income = incomeSumForEachMonth.toString().replaceFirst("\\[", "").replaceFirst("\\]", "");
         String months = monthNames.toString().replaceFirst("\\[", "").replaceFirst("\\]", "");
 
         request.getSession().setAttribute("income", income);
         request.getSession().setAttribute("months", months);
+    }
 
-        //Data for current month
+    private void computeDataForMonthExpenseChart(HttpServletRequest request) {
         List<Expense> expensesThisMonth = expenseService.getExpensesDuringCurrentMonth();
         List<Double> expenseSumForEachDay = new ArrayList<>();
         List<String> dayNames = new ArrayList<>();
-        for (int i = 1; i <= LocalDate.now().lengthOfMonth(); i++){
+        for (int i = 1; i <= LocalDate.now().lengthOfMonth(); i++) {
             Double daySum = 0d;
             for (Expense expense : expensesThisMonth) {
                 if ((expense.getDate().getDayOfMonth()) == i) {
-                    daySum += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * CurrencyProcessor.getCurrencyRateToUah(expense.getCurrency().getCode());
+                    daySum += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * exchangeRateService.getExchangeRateToUah(expense.getCurrency());
                 }
             }
             expenseSumForEachDay.add(daySum);
@@ -111,16 +114,18 @@ public class MainPage {
 
         request.getSession().setAttribute("expensePerDay", expensePerDay);
         request.getSession().setAttribute("days", days);
+    }
 
-        //Group monthExpenseByCategory
+    private void computeMonthExpensesByCategory(HttpServletRequest request) {
+        List<Expense> expensesThisMonth = expenseService.getExpensesDuringCurrentMonth();
         List<Category> categories = categoryService.getAllExpenseCategories();
         List<Double> expenseSumForEachCategory = new ArrayList<>();
         List<String> categoryNames = new ArrayList<>();
-        for(Category category : categories){
+        for (Category category : categories) {
             Double sumByCategory = 0d;
-            for(Expense expense : expensesThisMonth){
-                if(expense.getCategory().getName().equals(category.getName())){
-                    sumByCategory += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * CurrencyProcessor.getCurrencyRateToUah(expense.getCurrency().getCode());
+            for (Expense expense : expensesThisMonth) {
+                if (expense.getCategory().getName().equals(category.getName())) {
+                    sumByCategory += expense.getCurrency().getCode().equals("UAH") ? expense.getSum() : expense.getSum() * exchangeRateService.getExchangeRateToUah(expense.getCurrency());
                 }
             }
             expenseSumForEachCategory.add(sumByCategory);
@@ -132,17 +137,18 @@ public class MainPage {
 
         request.getSession().setAttribute("expenseSumForEachCategory", expenseSumForEachCategoryStr);
         request.getSession().setAttribute("categoryNames", categoryNamesStr);
-
-        Map<String,Double> currencyValues = accountList.stream()
-                .map(Account::getCurrency)
-                .distinct()
-                .collect(Collectors.toMap(Currency::getCode, b -> CurrencyProcessor.getCurrencyRateToUah(b.getCode())));
-
-        request.getSession().setAttribute("currencyValues", currencyValues);
-        return "index";
     }
 
-    private int getRightMonthOrder(int monthNumber){
+    private void computeExchangeRates(HttpServletRequest request, List<Account> accountList) {
+        Map<String, Double> currencyValues = accountList.stream()
+                .map(Account::getCurrency)
+                .distinct()
+                .collect(Collectors.toMap(Currency::getCode, b -> exchangeRateService.getExchangeRateToUah(b)));
+
+        request.getSession().setAttribute("currencyValues", currencyValues);
+    }
+
+    private int getRightMonthOrder(int monthNumber) {
         int month = monthNumber % 12;
         return month == 0 ? 12 : month;
     }
