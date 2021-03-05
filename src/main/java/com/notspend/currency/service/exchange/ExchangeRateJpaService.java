@@ -5,6 +5,7 @@ import com.notspend.currency.repository.ExchangeRateRepository;
 import com.notspend.currency.service.exchange.client.ExchangeApiClient;
 import com.notspend.currency.service.exchange.client.ExchangeApiClientFactory;
 import com.notspend.entity.Currency;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,17 +16,27 @@ public class ExchangeRateJpaService {
 
     private final ExchangeRateRepository repository;
 
-    private final ExchangeApiClientFactory factory = new ExchangeApiClientFactory();
+    private final ExchangeApiClientFactory factory;
 
+    @Autowired
     public ExchangeRateJpaService(ExchangeRateRepository repository) {
         this.repository = repository;
+        factory = new ExchangeApiClientFactory();
+    }
+
+    /**
+     * Constructor for unit-tests
+     */
+    ExchangeRateJpaService(ExchangeRateRepository repository, ExchangeApiClientFactory factory) {
+        this.repository = repository;
+        this.factory = factory;
     }
 
     public double getExchangeRate(Currency base, Currency target) {
         return getExchangeRate(base, target, LocalDate.now());
     }
 
-    private double getExchangeRate(Currency base, Currency target, LocalDate date) {
+    double getExchangeRate(Currency base, Currency target, LocalDate date) {
         if (!base.getCode().equals("UAH")) {
             throw new IllegalArgumentException(String.format("Currency %s not supported by ExchangeRateService", base.getCode()));
         }

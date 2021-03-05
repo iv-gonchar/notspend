@@ -1,7 +1,9 @@
 package com.notspend.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,8 @@ import javax.persistence.Table;
 @Entity
 @EqualsAndHashCode(of = {"code"})
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "currency")
 public class Currency {
 
