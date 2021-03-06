@@ -7,7 +7,7 @@ import com.notspend.service.persistance.ExchangeRateService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.UserService;
 import com.notspend.service.sync.ExpenseSyncService;
-import com.notspend.util.CalculationHelper;
+import com.notspend.service.view.CalculationService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 @Controller
 @CommonsLog
 public class MainPage {
+
+    @Autowired
+    private CalculationService calculationService;
 
     @Autowired
     private UserService userService;
@@ -56,13 +59,13 @@ public class MainPage {
         }
 
         request.getSession().setAttribute("username", username);
-        request.getSession().setAttribute("totalSum", String.format("%.2f", CalculationHelper.accountSum(accountList, exchangeRateService)));
+        request.getSession().setAttribute("totalSum", String.format("%.2f", calculationService.accountSum(accountList)));
 
         List<Expense> expenseDuringCurrentMonth = expenseService.getExpensesDuringCurrentMonth();
         List<Expense> incomeDuringCurrentMonth = expenseService.getIncomesDuringCurrentMonth();
 
-        request.getSession().setAttribute("spendCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(expenseDuringCurrentMonth, exchangeRateService)));
-        request.getSession().setAttribute("earnCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(incomeDuringCurrentMonth, exchangeRateService)));
+        request.getSession().setAttribute("spendCurrentMonth", String.format("%.2f", calculationService.expenseSum(expenseDuringCurrentMonth)));
+        request.getSession().setAttribute("earnCurrentMonth", String.format("%.2f", calculationService.expenseSum(incomeDuringCurrentMonth)));
 
         computeDataForYearIncomeChart(request);
         computeDataForMonthExpenseChart(request);

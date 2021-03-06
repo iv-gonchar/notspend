@@ -1,12 +1,8 @@
 package com.notspend.cotroller;
 
-import com.notspend.entity.Account;
-import com.notspend.entity.Category;
-import com.notspend.entity.Currency;
-import com.notspend.entity.Expense;
-import com.notspend.entity.User;
+import com.notspend.entity.*;
 import com.notspend.service.persistance.*;
-import com.notspend.util.CalculationHelper;
+import com.notspend.service.view.CalculationService;
 import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +21,9 @@ import java.util.List;
 public class ExpenseController {
 
     @Autowired
+    private CalculationService calculationService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -37,26 +36,23 @@ public class ExpenseController {
     private CurrencyService currencyService;
 
     @Autowired
-    private ExchangeRateService exchangeRateService;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping("add")
-    public String addForm(Model model){
+    public String addForm(Model model) {
         Expense expense = new Expense();
 
-        if (!model.containsAttribute("categories")){
+        if (!model.containsAttribute("categories")) {
             List<Category> categories = categoryService.getAllExpenseCategories();
             model.addAttribute("categories", categories);
         }
 
-        if (!model.containsAttribute("accounts")){
+        if (!model.containsAttribute("accounts")) {
             List<Account> accounts = accountService.getAccounts();
             model.addAttribute("accounts", accounts);
         }
 
-        if (!model.containsAttribute("currencies")){
+        if (!model.containsAttribute("currencies")) {
             List<Currency> currencies = currencyService.getAllCurrenciesAssignedToUser();
             model.addAttribute("currencies", currencies);
         }
@@ -76,8 +72,8 @@ public class ExpenseController {
                               @RequestParam("accountId") int accountId,
                               @ModelAttribute("tempCurrency") Currency currency,
                               RedirectAttributes redirectAttributes,
-                              Model model){
-        if(bindingResult.hasErrors()){
+                              Model model) {
+        if (bindingResult.hasErrors()) {
 //            List<Category> categories;
             List<Category> categories = categoryService.getAllExpenseCategories();
             List<Currency> currencies = currencyService.getAllCurrenciesAssignedToUser();
@@ -106,7 +102,7 @@ public class ExpenseController {
         expense.setTime(LocalTime.now());
         expense.setUser(user);
 
-        if(expense.getCurrency().equals(expense.getAccount().getCurrency())){
+        if (expense.getCurrency().equals(expense.getAccount().getCurrency())) {
             expenseService.addExpense(expense);
             if (expense.getCategory().isIncome()) {
                 return "redirect:/";
@@ -145,7 +141,7 @@ public class ExpenseController {
                                   @ModelAttribute("expenseCategory") String expenseCategory,
                                   @ModelAttribute("expenseAccount") String expenseAccount,
                                   @ModelAttribute("expenseCurrency") String expenseCurrency,
-                                  Model model){
+                                  Model model) {
         Expense expense = new Expense();
         expense.setDate(LocalDate.parse(expenseDate));
         expense.setTime(LocalTime.now());
@@ -171,7 +167,7 @@ public class ExpenseController {
     }
 
     @GetMapping("income")
-    public String addIncome(Model model){
+    public String addIncome(Model model) {
         Expense expense = new Expense();
 
         List<Category> categories = categoryService.getAllIncomeCategories();
@@ -185,42 +181,42 @@ public class ExpenseController {
         model.addAttribute("categories", categories);
         model.addAttribute("expense", expense);
         model.addAttribute("accounts", accounts);
-        model.addAttribute("type","income");
+        model.addAttribute("type", "income");
 
         return "expense/add";
     }
 
     @GetMapping("delete")
-    public String deleteExpense(@ModelAttribute("expenseId") int expenseId){
+    public String deleteExpense(@ModelAttribute("expenseId") int expenseId) {
         expenseService.deleteExpenseById(expenseId);
         return "success";
     }
 
     @GetMapping("all")
-    public String showAll(Model model){
+    public String showAll(Model model) {
         List<Expense> expenses = expenseService.getAllExpenses();
         model.addAttribute("expenseName", "Expenses during all time");
         model.addAttribute("expenses", expenses);
-        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses, exchangeRateService));
+        model.addAttribute("totalSum", calculationService.expenseSum(expenses));
 
         //for sums
         List<Account> accounts = accountService.getAccounts();
         model.addAttribute("accounts", accounts);
-        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts, exchangeRateService));
+        model.addAttribute("allMoneySummary", calculationService.accountSum(accounts));
         return "expense/all";
     }
 
     @GetMapping("currentmonth")
-    public String showCurrentMonth(Model model){
+    public String showCurrentMonth(Model model) {
         List<Expense> expenses = expenseService.getExpensesDuringCurrentMonth();
         model.addAttribute("expenseName", "Expenses during " + expenseService.getCurrentMonthName());
         model.addAttribute("expenses", expenses);
-        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses, exchangeRateService));
+        model.addAttribute("totalSum", calculationService.expenseSum(expenses));
 
         //for sums
         List<Account> accounts = accountService.getAccounts();
         model.addAttribute("accounts", accounts);
-        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts, exchangeRateService));
+        model.addAttribute("allMoneySummary", calculationService.accountSum(accounts));
         return "expense/all";
     }
 }
