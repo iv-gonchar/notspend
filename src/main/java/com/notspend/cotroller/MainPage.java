@@ -49,14 +49,7 @@ public class MainPage {
         String username = SecurityUserHandler.getCurrentUser();
         User user = userService.getUser(username);
         List<Account> accountList = user.getAccounts();
-        List<Account> accountsToSync = accountList.stream().filter(a -> a.getToken() != null && !a.getToken().isEmpty()).collect(Collectors.toList());
-        if (!accountsToSync.isEmpty()) {
-            try {
-                expenseSyncService.syncDataWithBankServer(accountsToSync);
-            } catch (AccountSyncFailedException e) {
-                log.error("Can't synchronize accounts." + e);
-            }
-        }
+        syncTransactions(accountList);
 
         request.getSession().setAttribute("username", username);
         request.getSession().setAttribute("totalSum", String.format("%.2f", calculationService.accountSum(accountList)));
@@ -72,6 +65,17 @@ public class MainPage {
         computeMonthExpensesByCategory(request);
         computeExchangeRates(request, accountList);
         return "index";
+    }
+
+    private void syncTransactions(List<Account> accounts) {
+        List<Account> accountsToSync = accounts.stream().filter(a -> a.getToken() != null && !a.getToken().isEmpty()).collect(Collectors.toList());
+        if (!accountsToSync.isEmpty()) {
+            try {
+                expenseSyncService.syncDataWithBankServer(accountsToSync);
+            } catch (AccountSyncFailedException e) {
+                log.error("Can't synchronize accounts." + e);
+            }
+        }
     }
 
     private void computeDataForYearIncomeChart(HttpServletRequest request) {
