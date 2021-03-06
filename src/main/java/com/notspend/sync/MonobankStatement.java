@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @EqualsAndHashCode(of = "id")
-class MonobankStatementAnswer {
+class MonobankStatement {
 
     private String id;
 

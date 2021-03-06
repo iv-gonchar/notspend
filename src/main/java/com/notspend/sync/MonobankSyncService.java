@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Service
 @Profile("monobank")
 @CommonsLog
-public class MonobankSyncServiceImpl implements TransactionSyncService {
+public class MonobankSyncService implements TransactionSyncService {
 
     private static final int TEN_MINUTES = 10 * 60; //sec
 
@@ -56,8 +56,8 @@ public class MonobankSyncServiceImpl implements TransactionSyncService {
     private final MccService mccService;
 
     @Autowired
-    public MonobankSyncServiceImpl(ExpenseService expenseService, CategoryService categoryService,
-                                   AccountService accountService, MccService mccService) {
+    public MonobankSyncService(ExpenseService expenseService, CategoryService categoryService,
+                               AccountService accountService, MccService mccService) {
         this.expenseService = expenseService;
         this.categoryService = categoryService;
         this.accountService = accountService;
@@ -109,7 +109,7 @@ public class MonobankSyncServiceImpl implements TransactionSyncService {
             return;
         }
 
-        List<MonobankStatementAnswer> monobankStatementAnswers = null;
+        List<MonobankStatement> monobankStatements = null;
         long currentEpochTime = TimeHelper.getCurrentEpochTime();
         long epochTimeFrom = currentEpochTime - MAX_MONOBANK_STATEMENT_TIME_IN_SECONDS;
 
@@ -118,12 +118,12 @@ public class MonobankSyncServiceImpl implements TransactionSyncService {
         String lastSuccessSyncId = account.getSynchronizationId();
 
         try {
-            monobankStatementAnswers = getStatements(account, epochTimeFrom, currentEpochTime);
+            monobankStatements = getStatements(account, epochTimeFrom, currentEpochTime);
         } catch (Exception e) {
             log.error("Can't retrieve statements.", e);
         }
 
-        for (MonobankStatementAnswer monobankExpense : monobankStatementAnswers) {
+        for (MonobankStatement monobankExpense : monobankStatements) {
             if (!monobankExpense.getId().equals(lastSuccessSyncId)) {
                 String mccCategoryName = mccService.getCategoryByMccCode(monobankExpense.getMcc());
                 if (mccCategoryName.isEmpty()) {
@@ -173,17 +173,17 @@ public class MonobankSyncServiceImpl implements TransactionSyncService {
         }
     }
 
-    private List<MonobankStatementAnswer> getStatements(Account account, long timeFrom, long timeTo){
+    private List<MonobankStatement> getStatements(Account account, long timeFrom, long timeTo){
         ObjectMapper mapper = new ObjectMapper();
-        List<MonobankStatementAnswer> monobankStatementAnswers;
+        List<MonobankStatement> monobankStatements;
         try {
             String jsonResponse = getJsonWithStatements(account, timeFrom, timeTo).orElseThrow();
-            monobankStatementAnswers = mapper.readValue(jsonResponse, new TypeReference<List<MonobankStatementAnswer>>(){});
+            monobankStatements = mapper.readValue(jsonResponse, new TypeReference<List<MonobankStatement>>(){});
         } catch (Exception e) {
             log.error("Can't parse answer." + e);
             return Collections.emptyList();
         }
-        return monobankStatementAnswers;
+        return monobankStatements;
     }
 
     private Optional<String> getJsonWithStatements(Account account, long timeFrom, long timeTo){
