@@ -56,13 +56,13 @@ public class MainPage {
         }
 
         request.getSession().setAttribute("username", username);
-        request.getSession().setAttribute("totalSum", String.format("%.2f", CalculationHelper.accountSum(accountList)));
+        request.getSession().setAttribute("totalSum", String.format("%.2f", CalculationHelper.accountSum(accountList, exchangeRateService)));
 
         List<Expense> expenseDuringCurrentMonth = expenseService.getExpensesDuringCurrentMonth();
         List<Expense> incomeDuringCurrentMonth = expenseService.getIncomesDuringCurrentMonth();
 
-        request.getSession().setAttribute("spendCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(expenseDuringCurrentMonth)));
-        request.getSession().setAttribute("earnCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(incomeDuringCurrentMonth)));
+        request.getSession().setAttribute("spendCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(expenseDuringCurrentMonth, exchangeRateService)));
+        request.getSession().setAttribute("earnCurrentMonth", String.format("%.2f", CalculationHelper.expenseSum(incomeDuringCurrentMonth, exchangeRateService)));
 
         computeDataForYearIncomeChart(request);
         computeDataForMonthExpenseChart(request);

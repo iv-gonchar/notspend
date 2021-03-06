@@ -5,11 +5,7 @@ import com.notspend.entity.Category;
 import com.notspend.entity.Currency;
 import com.notspend.entity.Expense;
 import com.notspend.entity.User;
-import com.notspend.service.persistance.AccountService;
-import com.notspend.service.persistance.CategoryService;
-import com.notspend.service.persistance.CurrencyService;
-import com.notspend.service.persistance.ExpenseService;
-import com.notspend.service.persistance.UserService;
+import com.notspend.service.persistance.*;
 import com.notspend.util.CalculationHelper;
 import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +35,9 @@ public class ExpenseController {
 
     @Autowired
     private CurrencyService currencyService;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
 
     @Autowired
     private UserService userService;
@@ -202,12 +201,12 @@ public class ExpenseController {
         List<Expense> expenses = expenseService.getAllExpenses();
         model.addAttribute("expenseName", "Expenses during all time");
         model.addAttribute("expenses", expenses);
-        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses));
+        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses, exchangeRateService));
 
         //for sums
         List<Account> accounts = accountService.getAccounts();
         model.addAttribute("accounts", accounts);
-        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts));
+        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts, exchangeRateService));
         return "expense/all";
     }
 
@@ -216,12 +215,12 @@ public class ExpenseController {
         List<Expense> expenses = expenseService.getExpensesDuringCurrentMonth();
         model.addAttribute("expenseName", "Expenses during " + expenseService.getCurrentMonthName());
         model.addAttribute("expenses", expenses);
-        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses));
+        model.addAttribute("totalSum", CalculationHelper.expenseSum(expenses, exchangeRateService));
 
         //for sums
         List<Account> accounts = accountService.getAccounts();
         model.addAttribute("accounts", accounts);
-        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts));
+        model.addAttribute("allMoneySummary", CalculationHelper.accountSum(accounts, exchangeRateService));
         return "expense/all";
     }
 }

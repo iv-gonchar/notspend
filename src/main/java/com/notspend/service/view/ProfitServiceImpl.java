@@ -2,7 +2,8 @@ package com.notspend.service.view;
 
 import com.notspend.entity.Expense;
 import com.notspend.entity.Profit;
-import com.notspend.util.CurrencyProcessor;
+import com.notspend.service.persistance.ExchangeRateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProfitServiceImpl implements ProfitService {
+
+    private final ExchangeRateService exchangeRateService;
 
     @Override
     public List<Profit> getProfitTableDuringLastYear(List<Expense> currentYearIncome, List<Expense> currentYearExpense) {
@@ -26,14 +30,14 @@ public class ProfitServiceImpl implements ProfitService {
             double monthIncomeSum = currentYearIncome.stream()
                     .filter(e -> e.getDate().getMonthValue() == monthToSync.getMonthValue())
                     .filter(e -> e.getDate().getYear() == monthToSync.getYear())
-                    .map(e -> e.getSum() * CurrencyProcessor.getCurrencyRateToUah(e.getCurrency().getCode()))
+                    .map(e -> e.getSum() * exchangeRateService.getExchangeRateToUah(e.getCurrency()))
                     .mapToDouble(Double::doubleValue)
                     .sum();
 
             double monthExpenseSum = currentYearExpense.stream()
                     .filter(e -> e.getDate().getMonthValue() == monthToSync.getMonthValue())
                     .filter(e -> e.getDate().getYear() == monthToSync.getYear())
-                    .map(e -> e.getSum() * CurrencyProcessor.getCurrencyRateToUah(e.getCurrency().getCode()))
+                    .map(e -> e.getSum() * exchangeRateService.getExchangeRateToUah(e.getCurrency()))
                     .mapToDouble(Double::doubleValue)
                     .sum();
 

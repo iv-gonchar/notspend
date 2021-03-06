@@ -1,7 +1,9 @@
 package com.notspend.util;
 
 import com.notspend.entity.Account;
+import com.notspend.entity.Currency;
 import com.notspend.entity.Expense;
+import com.notspend.service.persistance.ExchangeRateService;
 
 import java.util.List;
 
@@ -10,13 +12,13 @@ public class CalculationHelper {
     private CalculationHelper() {
     }
 
-    public static Double expenseSum(List<Expense> expenses){
+    public static Double expenseSum(List<Expense> expenses, ExchangeRateService exchangeRateService){
         Double sum = 0D;
         for (Expense expense : expenses){
-            String currencyCode = expense.getCurrency().getCode();
+            Currency currency = expense.getCurrency();
             //TODO: replace hardcoded currency
-            if (!currencyCode.equals("UAH")){
-                Double currencyRate = CurrencyProcessor.getCurrencyRateToUah(currencyCode);
+            if (!currency.getCode().equals("UAH")){
+                Double currencyRate = exchangeRateService.getExchangeRateToUah(currency);
                 sum = sum + expense.getSum() * currencyRate;
             } else {
                 sum += expense.getSum();
@@ -25,13 +27,13 @@ public class CalculationHelper {
         return sum;
     }
 
-    public static Double accountSum (List<Account> accounts){
+    public static Double accountSum (List<Account> accounts, ExchangeRateService exchangeRateService){
         Double sum = 0D;
         for (Account account : accounts){
-            String currencyCode = account.getCurrency().getCode();
+            Currency currency = account.getCurrency();
             //TODO: replace hardcoded currency
-            if (!currencyCode.equals("UAH")){
-                Double currencyRate = CurrencyProcessor.getCurrencyRateToUah(currencyCode);
+            if (!currency.getCode().equals("UAH")){
+                Double currencyRate = exchangeRateService.getExchangeRateToUah(currency);
                 sum = sum + account.getSummary() * currencyRate;
             } else {
                 sum += account.getSummary();
