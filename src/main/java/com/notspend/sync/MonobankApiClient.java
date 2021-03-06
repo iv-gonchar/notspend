@@ -43,6 +43,8 @@ class MonobankApiClient {
             return statements;
         } catch (RestClientException e) {
             log.error("Exception occured during communication with Monobank API", e);
+        } catch (Exception e) {
+            log.error("Can't retrieve statements.", e);
         }
         return new MonobankStatement[0];
     }

@@ -1,11 +1,8 @@
 package com.notspend.sync;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notspend.entity.Account;
 import com.notspend.entity.Category;
 import com.notspend.entity.Expense;
-import com.notspend.exception.AccountSyncFailedException;
 import com.notspend.service.TransactionSyncService;
 import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.CategoryService;
@@ -13,39 +10,30 @@ import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.MccService;
 import com.notspend.util.TimeHelper;
 import lombok.extern.apachecommons.CommonsLog;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Profile("monobank")
 @CommonsLog
 public class MonobankSyncService implements TransactionSyncService {
 
-    private static final int TEN_MINUTES = 10 * 60; //sec
+    /**
+     * 10 minutes in secords
+     */
+    private static final int TEN_MINUTES = 10 * 60;
 
-    private static final int MAX_MONOBANK_STATEMENT_TIME_IN_SECONDS = 2682000; // s (1 month)
-
-    private static final String MONOBANK_API_ENDPOINT = "https://api.monobank.ua/";
-
-    private static final int DEFAULT_CARD_NUMBER = 0;
+    /**
+     * Synchronization period, which is equal 1 month in seconds
+     */
+    private static final int SYNC_PERIOD = 2682000;
 
     private final ExpenseService expenseService;
 
@@ -54,6 +42,8 @@ public class MonobankSyncService implements TransactionSyncService {
     private final AccountService accountService;
 
     private final MccService mccService;
+
+    private final MonobankApiClient client = new MonobankApiClient();
 
     @Autowired
     public MonobankSyncService(ExpenseService expenseService, CategoryService categoryService,
@@ -65,67 +55,39 @@ public class MonobankSyncService implements TransactionSyncService {
     }
 
     @Override
-    public void syncDataWithBankServer(List<Account> accounts) throws AccountSyncFailedException {
-        if (accounts == null || accounts.isEmpty()){
-            throw new AccountSyncFailedException("List with accounts are empty or null");
-        }
-
-        List<Account> accountWithTokensToSync = accounts.stream()
+    public void syncDataWithBankServer(List<Account> accounts) {
+        accounts.stream()
                 .filter(a -> a.getToken() != null && !a.getToken().isEmpty())
-                .collect(Collectors.toList());
-
-        if (accountWithTokensToSync.isEmpty()) {
-            throw new AccountSyncFailedException("There is no accounts to sync");
-        }
-
-        for (Account account : accountWithTokensToSync){
-            syncAccount(account);
-        }
-
+                .forEach(this::syncAccount);
     }
 
-    private void syncAccount(Account account){
-        long delayBetweenSync = TimeHelper.getCurrentEpochTime() - account.getSynchronizationTime();
+    private void syncAccount(Account account) {
+        long delayBetweenSync = TEN_MINUTES + 1;
+        if (account.getSynchronizationTime() != null) {
+            delayBetweenSync = TimeHelper.getCurrentEpochTime() - account.getSynchronizationTime();
+        }
 
-        if (delayBetweenSync < TEN_MINUTES){
-            //if last sync was 10 min ago don't need to sync again
+        if (delayBetweenSync < TEN_MINUTES) {
             account.setSynchronizationTime(TimeHelper.getCurrentEpochTime());
             accountService.updateAccount(account);
             return;
         }
 
-        if (account.getSynchronizationTime() == null){
-            //this mean it's first time sync for this account
-            //so, we can define last sync id and set current time for last sync
-            String lastTransactionId = null;
-            try {
-                lastTransactionId = getLastTransactionId(account);
-            } catch (Exception e) {
-                log.warn("Can't get last transaction id" + e);
-            }
-            account.setSynchronizationId(lastTransactionId);
-            account.setSynchronizationTime(TimeHelper.getCurrentEpochTime());
-            accountService.updateAccount(account);
+        long instantTo = TimeHelper.getCurrentEpochTime();
+        long instantFrom = instantTo - SYNC_PERIOD;
+
+        if (account.getSynchronizationTime() == null) {
+            syncFirstTime(account, instantFrom, instantTo);
             return;
         }
-
-        List<MonobankStatement> monobankStatements = null;
-        long currentEpochTime = TimeHelper.getCurrentEpochTime();
-        long epochTimeFrom = currentEpochTime - MAX_MONOBANK_STATEMENT_TIME_IN_SECONDS;
-
 
         String firstSuccessfulSyncId = null;
         String lastSuccessSyncId = account.getSynchronizationId();
 
-        try {
-            monobankStatements = getStatements(account, epochTimeFrom, currentEpochTime);
-        } catch (Exception e) {
-            log.error("Can't retrieve statements.", e);
-        }
-
-        for (MonobankStatement monobankExpense : monobankStatements) {
-            if (!monobankExpense.getId().equals(lastSuccessSyncId)) {
-                String mccCategoryName = mccService.getCategoryByMccCode(monobankExpense.getMcc());
+        MonobankStatement[] statements = client.getStatements(account, instantFrom, instantTo);
+        for (MonobankStatement statement : statements) {
+            if (!statement.getId().equals(lastSuccessSyncId)) {
+                String mccCategoryName = mccService.getCategoryByMccCode(statement.getMcc());
                 if (mccCategoryName.isEmpty()) {
                     continue;
                 }
@@ -134,8 +96,8 @@ public class MonobankSyncService implements TransactionSyncService {
                 expense.setAccount(account);
                 expense.setUser(account.getUser());
                 expense.setCurrency(account.getCurrency());
-                expense.setComment(monobankExpense.getDescription());
-                expense.setSum(-(monobankExpense.getAmount() / 100d));
+                expense.setComment(statement.getDescription());
+                expense.setSum(-(statement.getAmount() / 100d));
 
                 List<Category> categories = categoryService.getAllExpenseCategories();
                 Category category = categories.stream()
@@ -152,14 +114,14 @@ public class MonobankSyncService implements TransactionSyncService {
 
                 expense.setCategory(categoryService.getCategory(category.getName()));
 
-                long epochTime = monobankExpense.getTime();
+                long epochTime = statement.getTime();
                 LocalDate date = LocalDate.ofInstant(Instant.ofEpochSecond(epochTime), ZoneId.systemDefault());
                 expense.setDate(date);
                 expense.setTime(LocalTime.ofSecondOfDay(epochTime % 3600));
 
                 expenseService.addExpense(expense);
                 if (firstSuccessfulSyncId == null) {
-                    firstSuccessfulSyncId = monobankExpense.getId();
+                    firstSuccessfulSyncId = statement.getId();
                 }
             } else {
                 //we find last sync id
@@ -173,38 +135,24 @@ public class MonobankSyncService implements TransactionSyncService {
         }
     }
 
-    private List<MonobankStatement> getStatements(Account account, long timeFrom, long timeTo){
-        ObjectMapper mapper = new ObjectMapper();
-        List<MonobankStatement> monobankStatements;
+    private void syncFirstTime(Account account, long from, long to) {
+        String lastTransactionId = null;
         try {
-            String jsonResponse = getJsonWithStatements(account, timeFrom, timeTo).orElseThrow();
-            monobankStatements = mapper.readValue(jsonResponse, new TypeReference<List<MonobankStatement>>(){});
+            MonobankStatement[] statements = client.getStatements(account, from, to);
+            lastTransactionId = getLastTransactionId(statements);
         } catch (Exception e) {
-            log.error("Can't parse answer." + e);
-            return Collections.emptyList();
+            log.warn("Can't get last transaction id" + e);
         }
-        return monobankStatements;
+        account.setSynchronizationId(lastTransactionId);
+        account.setSynchronizationTime(TimeHelper.getCurrentEpochTime());
+        accountService.updateAccount(account);
     }
 
-    private Optional<String> getJsonWithStatements(Account account, long timeFrom, long timeTo){
-        try (CloseableHttpClient client = HttpClients.createDefault()){
-            HttpGet httpGet = new HttpGet(MONOBANK_API_ENDPOINT + "personal/statement/" + DEFAULT_CARD_NUMBER + "/" + timeFrom + "/" + timeTo);
-            httpGet.setHeader("X-Token", account.getToken());
-
-            HttpResponse response = client.execute(httpGet);
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            return Optional.of(handler.handleResponse(response));
-        } catch (Exception e) {
-            log.error("Monobank server is down or some problem with Monobank API");
-            return Optional.empty();
+    private String getLastTransactionId(MonobankStatement[] statements) {
+        if (statements.length == 0) {
+            return null;
+        } else {
+            return statements[0].getId();
         }
-    }
-
-    private String getLastTransactionId(Account account){
-        LocalDateTime currentTime = LocalDateTime.now();
-        ZoneId zoneId = ZoneId.systemDefault();
-        long epochTimeTo = currentTime.atZone(zoneId).toEpochSecond();
-        long epochTimeFrom = currentTime.minus(30, ChronoUnit.DAYS).atZone(zoneId).toEpochSecond();
-        return getStatements(account, epochTimeFrom, epochTimeTo).stream().findFirst().orElseThrow().getId();
     }
 }
