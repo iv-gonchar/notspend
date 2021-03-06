@@ -11,9 +11,7 @@ import java.util.List;
 /**
  * Stub implementation which does nothing
  */
-@Service
-@Profile("stub")
-public class TransactionSyncServiceStub implements TransactionSyncService {
+class TransactionSyncServiceStub implements TransactionSyncService {
 
     @Override
     public void syncDataWithBankServer(List<Account> accounts) throws AccountSyncFailedException {

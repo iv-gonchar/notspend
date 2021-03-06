@@ -9,10 +9,8 @@ import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.MccService;
 import com.notspend.util.TimeHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -20,10 +18,9 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 
-@Service
-@Profile("monobank")
 @CommonsLog
-public class MonobankSyncService implements TransactionSyncService {
+@RequiredArgsConstructor
+class MonobankSyncService implements TransactionSyncService {
 
     /**
      * 10 minutes in secords
@@ -43,16 +40,7 @@ public class MonobankSyncService implements TransactionSyncService {
 
     private final MccService mccService;
 
-    private final MonobankApiClient client = new MonobankApiClient();
-
-    @Autowired
-    public MonobankSyncService(ExpenseService expenseService, CategoryService categoryService,
-                               AccountService accountService, MccService mccService) {
-        this.expenseService = expenseService;
-        this.categoryService = categoryService;
-        this.accountService = accountService;
-        this.mccService = mccService;
-    }
+    private final MonobankApiClient client;
 
     @Override
     public void syncDataWithBankServer(List<Account> accounts) {

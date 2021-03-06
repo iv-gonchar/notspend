@@ -21,10 +21,6 @@ class MonobankApiClient {
 
     private final UriComponents uriComponents;
 
-    public MonobankApiClient() {
-        this("https://api.monobank.ua/personal/statement/{account}/{from}/{to}");
-    }
-
     public MonobankApiClient(String api) {
         uriComponents = UriComponentsBuilder
                 .fromUriString(api)
