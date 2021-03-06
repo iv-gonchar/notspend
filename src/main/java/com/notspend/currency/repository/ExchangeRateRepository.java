@@ -2,7 +2,6 @@ package com.notspend.currency.repository;
 
 import com.notspend.currency.entity.ExchangeRate;
 import com.notspend.currency.entity.ExchangeRateId;
-import com.notspend.entity.Currency;
 import org.springframework.data.repository.Repository;
 
 import java.time.LocalDate;

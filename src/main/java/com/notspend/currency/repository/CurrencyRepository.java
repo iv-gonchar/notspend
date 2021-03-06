@@ -1,6 +1,6 @@
-package com.notspend.repository;
+package com.notspend.currency.repository;
 
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 

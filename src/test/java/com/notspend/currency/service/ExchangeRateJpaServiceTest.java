@@ -4,7 +4,7 @@ import com.notspend.currency.entity.ExchangeRate;
 import com.notspend.currency.repository.ExchangeRateRepository;
 import com.notspend.currency.service.api.client.ExchangeApiClient;
 import com.notspend.currency.service.api.client.ExchangeApiClientFactory;
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

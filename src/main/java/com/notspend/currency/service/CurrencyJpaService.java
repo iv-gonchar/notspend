@@ -1,7 +1,7 @@
-package com.notspend.service.persistance.jpa;
+package com.notspend.currency.service;
 
-import com.notspend.entity.Currency;
-import com.notspend.repository.CurrencyRepository;
+import com.notspend.currency.entity.Currency;
+import com.notspend.currency.repository.CurrencyRepository;
 import com.notspend.service.persistance.CurrencyService;
 import com.notspend.service.persistance.UserService;
 import lombok.RequiredArgsConstructor;

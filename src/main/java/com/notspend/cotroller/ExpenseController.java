@@ -1,5 +1,6 @@
 package com.notspend.cotroller;
 
+import com.notspend.currency.entity.Currency;
 import com.notspend.entity.*;
 import com.notspend.service.persistance.*;
 import com.notspend.service.view.CalculationService;

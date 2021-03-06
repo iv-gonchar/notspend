@@ -1,5 +1,6 @@
 package com.notspend.entity;
 
+import com.notspend.currency.entity.Currency;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,4 +1,4 @@
-package com.notspend.entity;
+package com.notspend.currency.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

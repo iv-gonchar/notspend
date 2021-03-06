@@ -1,5 +1,6 @@
-package com.notspend.cotroller;
+package com.notspend.currency;
 
+import com.notspend.cotroller.MvcTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;

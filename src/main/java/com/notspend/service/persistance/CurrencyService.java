@@ -1,6 +1,6 @@
 package com.notspend.service.persistance;
 
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 
 import java.util.List;
 

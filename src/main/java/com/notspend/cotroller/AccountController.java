@@ -1,7 +1,7 @@
 package com.notspend.cotroller;
 
 import com.notspend.entity.Account;
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 import com.notspend.entity.User;
 import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.CurrencyService;

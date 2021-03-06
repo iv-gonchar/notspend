@@ -1,12 +1,10 @@
-package com.notspend.repository;
+package com.notspend.currency.repository;
 
-import com.notspend.entity.Currency;
-import org.junit.jupiter.api.BeforeEach;
+import com.notspend.currency.entity.Currency;
+import com.notspend.repository.RepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

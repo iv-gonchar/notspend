@@ -1,6 +1,5 @@
 package com.notspend.currency.entity;
 
-import com.notspend.entity.Currency;
 import lombok.*;
 
 import java.io.Serializable;

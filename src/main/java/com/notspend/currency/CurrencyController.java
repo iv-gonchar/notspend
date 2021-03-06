@@ -1,6 +1,6 @@
-package com.notspend.cotroller;
+package com.notspend.currency;
 
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 import com.notspend.service.persistance.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

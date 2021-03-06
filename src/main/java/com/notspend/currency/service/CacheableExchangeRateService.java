@@ -1,6 +1,6 @@
 package com.notspend.currency.service;
 
-import com.notspend.entity.Currency;
+import com.notspend.currency.entity.Currency;
 import com.notspend.service.persistance.ExchangeRateService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
