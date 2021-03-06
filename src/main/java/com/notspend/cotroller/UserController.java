@@ -29,13 +29,6 @@ public class UserController {
     @Autowired
     private AuthorityService authorityService;
 
-    @GetMapping("all")
-    public String showAll(Model model){
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "user/all";
-    }
-
     @GetMapping("register")
     public String register(Model model){
         //logout if user login

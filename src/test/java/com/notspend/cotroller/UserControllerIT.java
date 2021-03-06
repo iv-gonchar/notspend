@@ -22,24 +22,6 @@ class UserControllerIT {
     UserController userController;
 
     @Test
-        // TODO remove this endpoint and test
-    void showAllAsAdmin() throws Exception {
-        mockMvc.perform(
-                get("/user/all").with(user("demo").password("demo").roles("ADMIN")).with(csrf().asHeader()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("user/all"))
-                .andExpect(model().attribute("users", hasSize(1)));
-    }
-
-    @Test
-        // TODO remove this endpoint and test
-    void showAllAsUserReturnsForbiddenStatus() throws Exception {
-        mockMvc.perform(
-                get("/user/all").with(user("demo").password("demo")).with(csrf().asHeader()))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
     void register() throws Exception {
         mockMvc.perform(
                 get("/user/register"))
