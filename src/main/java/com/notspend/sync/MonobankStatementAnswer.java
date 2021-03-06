@@ -1,4 +1,4 @@
-package com.notspend.service.sync;
+package com.notspend.sync;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

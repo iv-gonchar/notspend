@@ -1,4 +1,4 @@
-package com.notspend.service.sync;
+package com.notspend.sync;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import com.notspend.entity.Account;
 import com.notspend.entity.Category;
 import com.notspend.entity.Expense;
 import com.notspend.exception.AccountSyncFailedException;
+import com.notspend.service.TransactionSyncService;
 import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.ExpenseService;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 @Service
 @Profile("monobank")
 @CommonsLog
-public class MonobankSyncServiceImpl implements ExpenseSyncService {
+public class MonobankSyncServiceImpl implements TransactionSyncService {
 
     private static final int TEN_MINUTES = 10 * 60; //sec
 

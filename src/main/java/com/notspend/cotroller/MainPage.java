@@ -6,7 +6,7 @@ import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.ExchangeRateService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.UserService;
-import com.notspend.service.sync.ExpenseSyncService;
+import com.notspend.service.TransactionSyncService;
 import com.notspend.service.view.CalculationService;
 import com.notspend.util.SecurityUserHandler;
 import lombok.extern.apachecommons.CommonsLog;
@@ -39,7 +39,7 @@ public class MainPage {
     private CategoryService categoryService;
 
     @Autowired
-    private ExpenseSyncService expenseSyncService;
+    private TransactionSyncService transactionSyncService;
 
     @Autowired
     private ExchangeRateService exchangeRateService;
@@ -71,7 +71,7 @@ public class MainPage {
         List<Account> accountsToSync = accounts.stream().filter(a -> a.getToken() != null && !a.getToken().isEmpty()).collect(Collectors.toList());
         if (!accountsToSync.isEmpty()) {
             try {
-                expenseSyncService.syncDataWithBankServer(accountsToSync);
+                transactionSyncService.syncDataWithBankServer(accountsToSync);
             } catch (AccountSyncFailedException e) {
                 log.error("Can't synchronize accounts." + e);
             }
