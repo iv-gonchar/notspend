@@ -1,6 +1,7 @@
 package com.notspend.cotroller;
 
 import com.notspend.TestDatabaseInitializer;
+import com.notspend.config.AppConfig;
 import com.notspend.config.TimeZoneConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -22,7 +23,7 @@ import java.lang.annotation.Target;
 @AutoConfigureMockMvc
 @AutoConfigureDataJpa
 // specifies configuration for our beans and initializer which starts MySql in container
-@ContextConfiguration(classes = {ControllerTestConfig.class, TimeZoneConfig.class}, initializers = TestDatabaseInitializer.class)
+@ContextConfiguration(classes = {AppConfig.class, TimeZoneConfig.class}, initializers = TestDatabaseInitializer.class)
 // runs junits with Spring extension
 @ExtendWith(SpringExtension.class)
 // specify test properties file location
