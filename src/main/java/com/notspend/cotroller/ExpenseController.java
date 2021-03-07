@@ -4,7 +4,6 @@ import com.notspend.currency.entity.Currency;
 import com.notspend.entity.*;
 import com.notspend.service.persistance.*;
 import com.notspend.service.view.CalculationService;
-import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,6 +72,7 @@ public class ExpenseController {
                               @RequestParam("accountId") int accountId,
                               @ModelAttribute("tempCurrency") Currency currency,
                               RedirectAttributes redirectAttributes,
+                              User user,
                               Model model) {
         if (bindingResult.hasErrors()) {
 //            List<Category> categories;
@@ -92,7 +92,6 @@ public class ExpenseController {
             return "expense/add";
         }
 
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
         Category selectedCategory = categoryService.getCategory(categoryId);
         Currency selectedCurrency = currencyService.getCurrencyByCode(currency.getCode());
         Account selectedAccount = accountService.getAccount(accountId);
@@ -142,6 +141,7 @@ public class ExpenseController {
                                   @ModelAttribute("expenseCategory") String expenseCategory,
                                   @ModelAttribute("expenseAccount") String expenseAccount,
                                   @ModelAttribute("expenseCurrency") String expenseCurrency,
+                                  User user,
                                   Model model) {
         Expense expense = new Expense();
         expense.setDate(LocalDate.parse(expenseDate));
@@ -149,8 +149,6 @@ public class ExpenseController {
         expense.setComment(expenseComment);
         Category category = categoryService.getCategory(Integer.parseInt(expenseCategory));
         Account account = accountService.getAccount(Integer.parseInt(expenseAccount));
-        String username = SecurityUserHandler.getCurrentUser();
-        User user = userService.getUser(username);
 
         expense.setCategory(category);
         expense.setAccount(account);

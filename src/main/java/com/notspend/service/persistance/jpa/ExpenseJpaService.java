@@ -7,7 +7,6 @@ import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.UserService;
 import com.notspend.util.DateHelper;
-import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class ExpenseJpaService implements ExpenseService {
     public Expense getExpenseById(int id) {
         return expenseRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no expense with id " + id + " in repository " +
-                        "for current user " + SecurityUserHandler.getCurrentUser())
+                        "for current user " + userService.currentUser())
         );
     }
 

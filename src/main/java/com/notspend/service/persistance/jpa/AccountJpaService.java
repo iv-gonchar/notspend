@@ -5,7 +5,6 @@ import com.notspend.repository.AccountRepository;
 import com.notspend.repository.ExpenseRepository;
 import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.UserService;
-import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class AccountJpaService implements AccountService {
     public Account getAccount(int id) {
         return accountRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no account with id " + id + " in repository " +
-                        "for current user " + SecurityUserHandler.getCurrentUser())
+                        "for current user " + userService.currentUser())
         );
     }
 

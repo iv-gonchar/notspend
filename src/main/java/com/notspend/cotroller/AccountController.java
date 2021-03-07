@@ -7,7 +7,6 @@ import com.notspend.service.persistance.AccountService;
 import com.notspend.service.persistance.CurrencyService;
 import com.notspend.service.persistance.UserService;
 import com.notspend.service.view.CalculationService;
-import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,14 +46,13 @@ public class AccountController {
 
     @PostMapping("addProcess")
     public String processAddAccountForm(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult,
-                                        @ModelAttribute("tempCurrency") Currency currency,
+                                        @ModelAttribute("tempCurrency") Currency currency, User user,
                                         Model model){
         if (bindingResult.hasErrors()){
             List<Currency> currencies = currencyService.getAllCurrencies();
             model.addAttribute("currencies", currencies);
             return "account/add";
         }
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
         account.setUser(user);
         account.setCurrency(currencyService.getCurrencyByCode(currency.getCode()));
         accountService.addAccount(account);

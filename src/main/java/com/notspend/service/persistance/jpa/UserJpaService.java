@@ -3,9 +3,12 @@ package com.notspend.service.persistance.jpa;
 import com.notspend.entity.User;
 import com.notspend.repository.UserRepository;
 import com.notspend.service.persistance.UserService;
-import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +48,13 @@ public class UserJpaService implements UserService {
 
     @Override
     public String currentUser() {
-        return SecurityUserHandler.getCurrentUser();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails)principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 }

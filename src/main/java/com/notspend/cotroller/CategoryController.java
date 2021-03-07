@@ -4,7 +4,6 @@ import com.notspend.entity.Category;
 import com.notspend.entity.User;
 import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.UserService;
-import com.notspend.util.SecurityUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +51,7 @@ public class CategoryController {
 
     @PostMapping("addProcess")
     public String processAddCategoryForm(@Valid @ModelAttribute("category") Category category,
-                                         BindingResult bindingResult,
+                                         BindingResult bindingResult, User user,
                                          Model model){
         if (bindingResult.hasErrors()){
             return "category/add";
@@ -61,7 +60,6 @@ public class CategoryController {
             model.addAttribute("category", category);
             return "category/nameexist";
         }
-        User user = userService.getUser(SecurityUserHandler.getCurrentUser());
         category.setUser(user);
         categoryService.addCategory(category);
         return "success";
@@ -108,10 +106,10 @@ public class CategoryController {
     }
 
     @PostMapping("updateprocess")
-    public String updateProcess(@ModelAttribute("category") Category category){
+    public String updateProcess(@ModelAttribute("category") Category category, User user) {
         //when update category User for some reason null
         //todo: rework this
-        category.setUser(userService.getUser(SecurityUserHandler.getCurrentUser()));
+        category.setUser(user);
         categoryService.updateCategory(category);
         if (category.isIncome()){
             return "redirect:allincome";
@@ -131,9 +129,9 @@ public class CategoryController {
     @PostMapping("transferToNewCategory")
     public String transferToNewCategoryAndDelete(@ModelAttribute("newCategory") Category category,
                                                  @ModelAttribute("categoryToDelete") int fromCategoryId,
+                                                 User user,
                                                  Model model){
-        String username = SecurityUserHandler.getCurrentUser();
-        category.setUser(userService.getUser(username));
+        category.setUser(user);
         categoryService.addCategory(category);
         categoryService.replaceCategoryInAllExpenses(fromCategoryId, category.getId());
         return "success";

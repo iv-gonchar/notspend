@@ -5,7 +5,6 @@ import com.notspend.repository.CategoryRepository;
 import com.notspend.repository.ExpenseRepository;
 import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.UserService;
-import com.notspend.util.SecurityUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class CategoryJpaService implements CategoryService {
     public Category getCategory(int id) {
         return categoryRepository.getByIdAndUserUsername(id, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no category with id " + id + " in repository" +
-                        "for current user " + SecurityUserHandler.getCurrentUser())
+                        "for current user " + userService.currentUser())
         );
     }
 
@@ -53,7 +52,7 @@ public class CategoryJpaService implements CategoryService {
     public Category getCategory(String name) {
         return categoryRepository.getByNameAndUserUsername(name, userService.currentUser()).orElseThrow(
                 () -> new NoSuchElementException("There is no category with name " + name + " in repository" +
-                        "for current user " + SecurityUserHandler.getCurrentUser())
+                        "for current user " + userService.currentUser())
         );
     }
 
