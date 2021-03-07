@@ -1,15 +1,17 @@
 package com.notspend.cotroller;
 
 import com.notspend.currency.entity.Currency;
-import com.notspend.entity.*;
+import com.notspend.entity.Account;
+import com.notspend.entity.Category;
+import com.notspend.entity.Expense;
+import com.notspend.entity.User;
 import com.notspend.exception.AccountSyncFailedException;
+import com.notspend.service.TransactionSyncService;
 import com.notspend.service.persistance.CategoryService;
 import com.notspend.service.persistance.ExchangeRateService;
 import com.notspend.service.persistance.ExpenseService;
 import com.notspend.service.persistance.UserService;
-import com.notspend.service.TransactionSyncService;
 import com.notspend.service.view.CalculationService;
-import com.notspend.util.SecurityUserHandler;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,13 +48,11 @@ public class MainPage {
     private ExchangeRateService exchangeRateService;
 
     @GetMapping(value = "/")
-    public String getMainPage(HttpServletRequest request) {
-        String username = SecurityUserHandler.getCurrentUser();
-        User user = userService.getUser(username);
+    public String getMainPage(HttpServletRequest request, User user) {
         List<Account> accountList = user.getAccounts();
         syncTransactions(accountList);
 
-        request.getSession().setAttribute("username", username);
+        request.getSession().setAttribute("username", user.getUsername());
         request.getSession().setAttribute("totalSum", String.format("%.2f", calculationService.accountSum(accountList)));
 
         List<Expense> expenseDuringCurrentMonth = expenseService.getExpensesDuringCurrentMonth();
